@@ -2,7 +2,7 @@
 // Default Astryx styling only — no custom CSS, no overrides.
 import { HStack, VStack } from "@astryxdesign/core/Layout";
 import { TopNav, TopNavHeading, TopNavItem } from "@astryxdesign/core/TopNav";
-import { ClickableCard } from "@astryxdesign/core/ClickableCard";
+import { Card } from "@astryxdesign/core/Card";
 import { Heading } from "@astryxdesign/core/Heading";
 import { Text } from "@astryxdesign/core/Text";
 import { Link } from "@astryxdesign/core/Link";
@@ -85,19 +85,24 @@ export function ProjectCard({ project, pathPrefix }) {
   // project.url looks like /projects/banking-app/ — take the last segment.
   const slug = project.url.split("/").filter(Boolean).pop();
   const ProjectIcon = PROJECT_ICONS[slug] || Squares2X2Icon;
+  // ClickableCard needs client-side JS to navigate, which a static build
+  // doesn't have — so wrap a plain Card in a real Link instead. The whole
+  // card navigates with no JS required.
   return (
-    <ClickableCard label={title} href={href} elevation="low">
-      <VStack gap={3}>
-        <Icon icon={ProjectIcon} size="lg" color="secondary" />
-        <VStack gap={1}>
-          <Heading level={3}>{title}</Heading>
-          <Text type="supporting">{summary}</Text>
+    <Link href={href} color="inherit" display="block">
+      <Card elevation="low">
+        <VStack gap={3}>
+          <Icon icon={ProjectIcon} size="lg" color="secondary" />
+          <VStack gap={1}>
+            <Heading level={3}>{title}</Heading>
+            <Text type="supporting">{summary}</Text>
+          </VStack>
+          <Text type="supporting" color="secondary">
+            {role} · {timeline}
+          </Text>
         </VStack>
-        <Text type="supporting" color="secondary">
-          {role} · {timeline}
-        </Text>
-      </VStack>
-    </ClickableCard>
+      </Card>
+    </Link>
   );
 }
 
