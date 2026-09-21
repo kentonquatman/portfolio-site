@@ -59,7 +59,7 @@ export function SiteTopNav({ site, pathPrefix, pageUrl }) {
 
 export function SiteFooter({ site, year }) {
   return (
-    <VStack gap={3} paddingBlock={4}>
+    <VStack gap={3} paddingBlock={4} paddingInline={4}>
       <Divider />
       <HStack hAlign="between" vAlign="center">
         <Text type="supporting">

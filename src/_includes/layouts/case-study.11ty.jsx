@@ -3,7 +3,7 @@ layout: layouts/base.11ty.jsx
 ---
 // Case-study layout for Markdown project files.
 // Default Astryx styling only — no custom CSS.
-import { HStack, VStack } from "@astryxdesign/core/Layout";
+import { HStack, VStack, Section } from "@astryxdesign/core/Layout";
 import { Heading } from "@astryxdesign/core/Heading";
 import { Text } from "@astryxdesign/core/Text";
 import { Link } from "@astryxdesign/core/Link";
@@ -30,8 +30,9 @@ export default function CaseStudyLayout(data) {
   const index = projects.findIndex((p) => p.page.url === page.url);
   const next = projects[(index + 1) % projects.length];
   return (
-    <VStack gap={6} paddingBlock={6}>
-      <Breadcrumbs variant="supporting">
+    <Section paddingBlock={6}>
+      <VStack gap={6}>
+        <Breadcrumbs variant="supporting">
         <BreadcrumbItem href={`${pathPrefix}`}>Home</BreadcrumbItem>
         <BreadcrumbItem href={`${pathPrefix}work/`}>Work</BreadcrumbItem>
         <BreadcrumbItem>{title}</BreadcrumbItem>
@@ -77,5 +78,6 @@ export default function CaseStudyLayout(data) {
         )}
       </VStack>
     </VStack>
+  </Section>
   );
 }
