@@ -27,12 +27,15 @@ export function SiteTopNav({ site, pathPrefix, pageUrl }) {
     >
       {NAV_ITEMS.map((item) => {
         const href = `${pathPrefix}${item.slug}`;
+        // page.url may or may not include the path prefix depending on the
+        // 11ty version, so match against both forms.
+        const isSelected = pageUrl === href || pageUrl === `/${item.slug}`;
         return (
           <TopNavItem
             key={href}
             label={item.label}
             href={href}
-            isSelected={pageUrl === href}
+            isSelected={isSelected}
           />
         );
       })}
