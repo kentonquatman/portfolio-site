@@ -6,7 +6,7 @@ timeline: "2022 · Ongoing"
 team: Design team + engineering partners
 order: 3
 tags: projects
-layout: layouts/case-study.njk
+layout: layouts/case-study.11ty.jsx
 ---
 
 ## Overview

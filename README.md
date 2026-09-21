@@ -1,6 +1,8 @@
 # Portfolio
 
-A simple UX design portfolio built with [11ty](https://www.11ty.dev/) and [Sass](https://sass-lang.com/).
+A simple UX design portfolio built with [11ty](https://www.11ty.dev/) and
+[Astryx](https://www.astryx.design/) (stock Neutral theme, default styling —
+no custom CSS).
 
 ## Getting started
 
@@ -10,11 +12,8 @@ npm install
 
 ## Local development
 
-Run the dev server and the Sass watcher in two terminals:
-
 ```bash
 npm start        # 11ty dev server with live reload
-npm run watch:css  # rebuilds CSS on every Sass change
 ```
 
 ## Production build
@@ -23,13 +22,22 @@ npm run watch:css  # rebuilds CSS on every Sass change
 npm run build
 ```
 
-This compiles the site with 11ty and then compiles `src/scss/main.scss`
-into `_site/css/main.css`.
+This renders the `.11ty.jsx` pages and layouts to static HTML with React
+server-side rendering, copies the Astryx stylesheets (`reset.css`,
+`astryx.css`, `theme.css`) into `_site/css/`, and writes the site to `_site/`.
+
+Set `ELEVENTY_PATH_PREFIX=/repo-name/` when deploying to a project subpath
+(e.g. `username.github.io/portfolio-site`); it defaults to `/`.
 
 ## Making it yours
 
 - **Site details** (name, role, email, social links): edit `src/_data/site.js`
-- **Pages**: `src/index.njk`, `src/work.njk`, `src/about.njk`, `src/contact.njk`
+- **Pages**: `src/index.11ty.jsx`, `src/work.11ty.jsx`,
+  `src/about.11ty.jsx`, `src/contact.11ty.jsx`
+- **Shared components** (header, footer, project card):
+  `src/_includes/components.jsx`
+- **Layouts**: `src/_includes/layouts/base.11ty.jsx`,
+  `src/_includes/layouts/case-study.11ty.jsx`
 - **Case studies**: add Markdown files in `src/projects/` with this front matter:
 
   ```yaml
@@ -41,11 +49,11 @@ into `_site/css/main.css`.
   team: Who you worked with
   order: 4
   tags: projects
-  layout: layouts/case-study.njk
+  layout: layouts/case-study.11ty.jsx
   ---
   ```
 
-- **Styles**: everything lives in `src/scss/` — start with `_variables.scss`
+- **Styles**: default Astryx Neutral theme only. No custom CSS.
 
 ## Deployment
 

@@ -1,1 +1,24 @@
-{"author":"","description":"A simple UX design portfolio built with 11ty and Sass.","devDependencies":{"@11ty/eleventy":"^3.1.6","sass":"^1.104.1"},"keywords":[],"license":"ISC","name":"portfolio","scripts":{"build":"npm run build:site && npm run build:css","build:css":"sass src/scss/main.scss _site/css/main.css --style=compressed --no-source-map","build:site":"eleventy","start":"eleventy --serve","watch:css":"sass --watch src/scss/main.scss:_site/css/main.css --style=compressed --no-source-map"},"version":"1.0.0"}
+{
+  "author": "",
+  "description": "A simple UX design portfolio built with 11ty and Astryx.",
+  "devDependencies": {
+    "@11ty/eleventy": "^3.1.6"
+  },
+  "keywords": [],
+  "license": "ISC",
+  "name": "portfolio",
+  "scripts": {
+    "build": "eleventy",
+    "start": "eleventy --serve"
+  },
+  "version": "1.0.0",
+  "dependencies": {
+    "@astryxdesign/cli": "^0.6.2",
+    "@astryxdesign/core": "^0.6.2",
+    "@astryxdesign/theme-neutral": "^0.6.2",
+    "@stylexjs/stylex": "^0.19.1",
+    "esbuild": "^0.28.2",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0"
+  }
+}

@@ -6,7 +6,7 @@ timeline: "2023 · 4 months"
 team: 1 designer, 3 engineers, 1 PM
 order: 2
 tags: projects
-layout: layouts/case-study.njk
+layout: layouts/case-study.11ty.jsx
 ---
 
 ## Overview
