@@ -1,36 +1,46 @@
 // Shared Astryx-based building blocks for the portfolio.
 // Default Astryx styling only — no custom CSS, no overrides.
 import { HStack, VStack } from "@astryxdesign/core/Layout";
+import { TopNav, TopNavHeading, TopNavItem } from "@astryxdesign/core/TopNav";
 import { ClickableCard } from "@astryxdesign/core/ClickableCard";
 import { Heading } from "@astryxdesign/core/Heading";
 import { Text } from "@astryxdesign/core/Text";
 import { Link } from "@astryxdesign/core/Link";
 import { Divider } from "@astryxdesign/core/Divider";
 
-export function SiteHeader({ site, pathPrefix }) {
-  const nav = [
-    { label: "Home", href: `${pathPrefix}` },
-    { label: "Work", href: `${pathPrefix}work/` },
-    { label: "About", href: `${pathPrefix}about/` },
-    { label: "Contact", href: `${pathPrefix}contact/` },
-  ];
+const NAV_ITEMS = [
+  { label: "Home", slug: "" },
+  { label: "Work", slug: "work/" },
+  { label: "About", slug: "about/" },
+  { label: "Contact", slug: "contact/" },
+];
+
+// Top navigation rendered in the AppShell topNav slot. AppShell generates
+// the mobile nav drawer from this automatically below the md breakpoint.
+export function SiteTopNav({ site, pathPrefix, pageUrl }) {
   return (
-    <HStack hAlign="between" vAlign="center" paddingBlock={3}>
-      <Link href={`${pathPrefix}`}>
-        <Text weight="semibold">{site.name}</Text>
-      </Link>
-      <HStack as="nav" gap={4} vAlign="center" aria-label="Primary">
-        {nav.map((item) => (
-          <Link key={item.href} href={item.href}>
-            {item.label}
-          </Link>
-        ))}
-      </HStack>
-    </HStack>
+    <TopNav
+      label="Primary"
+      heading={
+        <TopNavHeading heading={site.name} headingHref={pathPrefix} />
+      }
+    >
+      {NAV_ITEMS.map((item) => {
+        const href = `${pathPrefix}${item.slug}`;
+        return (
+          <TopNavItem
+            key={href}
+            label={item.label}
+            href={href}
+            isSelected={pageUrl === href}
+          />
+        );
+      })}
+    </TopNav>
   );
 }
 
-export function SiteFooter({ site, pathPrefix, year }) {
+export function SiteFooter({ site, year }) {
   return (
     <VStack gap={3} paddingBlock={4}>
       <Divider />

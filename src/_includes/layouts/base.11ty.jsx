@@ -1,6 +1,9 @@
-// Base document frame. Default Astryx styling only — no custom CSS.
+// Base document frame: AppShell owns the top navigation and page landmarks,
+// Layout constrains the content column and footer. Default Astryx styling
+// only — no custom CSS.
+import { AppShell } from "@astryxdesign/core/AppShell";
 import { Layout } from "@astryxdesign/core/Layout";
-import { SiteHeader, SiteFooter, RawHtml } from "../components.jsx";
+import { SiteTopNav, SiteFooter, RawHtml } from "../components.jsx";
 
 export default function BaseLayout(data) {
   const { site, title, content, pathPrefix, page } = data;
@@ -29,15 +32,23 @@ export default function BaseLayout(data) {
         <link rel="stylesheet" href={`${pathPrefix}css/theme.css`} />
       </head>
       <body>
-        <Layout
-          contentWidth={960}
-          header={<SiteHeader site={site} pathPrefix={pathPrefix} />}
-          footer={
-            <SiteFooter site={site} pathPrefix={pathPrefix} year={year} />
+        <AppShell
+          height="auto"
+          topNav={
+            <SiteTopNav
+              site={site}
+              pathPrefix={pathPrefix}
+              pageUrl={page.url}
+            />
           }
         >
-          <RawHtml html={content} />
-        </Layout>
+          <Layout
+            contentWidth={960}
+            footer={<SiteFooter site={site} year={year} />}
+          >
+            <RawHtml html={content} />
+          </Layout>
+        </AppShell>
       </body>
     </html>
   );
