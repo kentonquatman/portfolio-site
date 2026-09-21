@@ -47,7 +47,11 @@ export default function Home(data) {
           </HStack>
           <Grid columns={{ minWidth: 280, repeat: "fit" }} gap={4}>
             {collections.projects.map((project) => (
-              <ProjectCard key={project.page.url} project={project} />
+              <ProjectCard
+                key={project.page.url}
+                project={project}
+                pathPrefix={pathPrefix}
+              />
             ))}
           </Grid>
         </VStack>

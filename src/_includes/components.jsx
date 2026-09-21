@@ -63,11 +63,13 @@ export function SiteFooter({ site, year }) {
   );
 }
 
-export function ProjectCard({ project }) {
+export function ProjectCard({ project, pathPrefix }) {
   const { title, summary, role, timeline } = project.data;
-  // project.url already includes the configured path prefix.
+  // Collection item URLs never include the path prefix, so prepend it the
+  // same way the nav links do.
+  const href = `${pathPrefix}${project.url.replace(/^\//, "")}`;
   return (
-    <ClickableCard label={title} href={project.url}>
+    <ClickableCard label={title} href={href}>
       <VStack gap={2}>
         <Heading level={3}>{title}</Heading>
         <Text type="supporting">{summary}</Text>

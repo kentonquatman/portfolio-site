@@ -1,0 +1,10 @@
+/* Document base font for the stock Astryx Neutral theme.
+ *
+ * The theme defines --font-family-body but only applies it to h1-h6 and p.
+ * Components such as TopNav and Breadcrumb declare font-family: inherit,
+ * so they need a base font on the document to inherit. This applies the
+ * theme's own token; it overrides no component styles.
+ */
+body {
+  font-family: var(--font-family-body);
+}

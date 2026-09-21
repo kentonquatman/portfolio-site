@@ -13,6 +13,9 @@ module.exports = function (eleventyConfig) {
     "node_modules/@astryxdesign/core/src/reset.css": "css/reset.css",
     "node_modules/@astryxdesign/core/dist/astryx.css": "css/astryx.css",
     "node_modules/@astryxdesign/theme-neutral/dist/theme.css": "css/theme.css",
+    // Document base font (applies the theme's own --font-family-body token;
+    // the stock theme never sets it on body itself).
+    "src/css/base.css": "css/base.css",
   });
 
   // URL prefix for project-pages deploys (e.g. /portfolio-site/). Always

@@ -11,7 +11,7 @@ import { Text } from "@astryxdesign/core/Text";
 import { ProjectCard } from "./_includes/components.jsx";
 
 export default function Work(data) {
-  const { collections } = data;
+  const { collections, pathPrefix } = data;
   return (
     <VStack gap={6} paddingBlock={6}>
       <VStack gap={2}>
@@ -26,7 +26,11 @@ export default function Work(data) {
       </VStack>
       <Grid columns={{ minWidth: 280, repeat: "fit" }} gap={4}>
         {collections.projects.map((project) => (
-          <ProjectCard key={project.page.url} project={project} />
+          <ProjectCard
+            key={project.page.url}
+            project={project}
+            pathPrefix={pathPrefix}
+          />
         ))}
       </Grid>
     </VStack>

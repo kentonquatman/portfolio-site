@@ -30,6 +30,7 @@ export default function BaseLayout(data) {
         <link rel="stylesheet" href={`${pathPrefix}css/reset.css`} />
         <link rel="stylesheet" href={`${pathPrefix}css/astryx.css`} />
         <link rel="stylesheet" href={`${pathPrefix}css/theme.css`} />
+        <link rel="stylesheet" href={`${pathPrefix}css/base.css`} />
       </head>
       <body>
         <AppShell
