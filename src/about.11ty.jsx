@@ -46,7 +46,7 @@ export default function About(data) {
       <Section>
         <VStack gap={3}>
           <Heading level={2}>What I do</Heading>
-          <HStack gap={2} style={{ flexWrap: "wrap" }}>
+          <HStack gap={2} wrap="wrap">
             {SKILLS.map((skill) => (
               <Badge key={skill} variant="neutral" label={skill} />
             ))}
