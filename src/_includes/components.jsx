@@ -7,6 +7,13 @@ import { Heading } from "@astryxdesign/core/Heading";
 import { Text } from "@astryxdesign/core/Text";
 import { Link } from "@astryxdesign/core/Link";
 import { Divider } from "@astryxdesign/core/Divider";
+import { Icon } from "@astryxdesign/core/Icon";
+import {
+  DevicePhoneMobileIcon,
+  ShoppingBagIcon,
+  SwatchIcon,
+  Squares2X2Icon,
+} from "@heroicons/react/24/outline";
 
 const NAV_ITEMS = [
   { label: "Home", slug: "" },
@@ -14,6 +21,13 @@ const NAV_ITEMS = [
   { label: "About", slug: "about/" },
   { label: "Contact", slug: "contact/" },
 ];
+
+// Visual anchor per project, keyed by the project file slug.
+const PROJECT_ICONS = {
+  "banking-app": DevicePhoneMobileIcon,
+  "checkout-flow": ShoppingBagIcon,
+  "design-system": SwatchIcon,
+};
 
 // Top navigation rendered in the AppShell topNav slot. AppShell generates
 // the mobile nav drawer from this automatically below the md breakpoint.
@@ -68,11 +82,17 @@ export function ProjectCard({ project, pathPrefix }) {
   // Collection item URLs never include the path prefix, so prepend it the
   // same way the nav links do.
   const href = `${pathPrefix}${project.url.replace(/^\//, "")}`;
+  // project.url looks like /projects/banking-app/ — take the last segment.
+  const slug = project.url.split("/").filter(Boolean).pop();
+  const ProjectIcon = PROJECT_ICONS[slug] || Squares2X2Icon;
   return (
-    <ClickableCard label={title} href={href}>
-      <VStack gap={2}>
-        <Heading level={3}>{title}</Heading>
-        <Text type="supporting">{summary}</Text>
+    <ClickableCard label={title} href={href} elevation="low">
+      <VStack gap={3}>
+        <Icon icon={ProjectIcon} size="lg" color="secondary" />
+        <VStack gap={1}>
+          <Heading level={3}>{title}</Heading>
+          <Text type="supporting">{summary}</Text>
+        </VStack>
         <Text type="supporting" color="secondary">
           {role} · {timeline}
         </Text>
