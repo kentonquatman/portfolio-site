@@ -1,0 +1,10 @@
+<footer class="site-footer">
+  <div class="container site-footer__inner">
+    <p>© {% year %} {{ site.name }} · {{ site.location }}</p>
+    <ul class="site-footer__social">
+      {% for link in site.social %}
+      <li><a href="{{ link.url }}" rel="noopener">{{ link.label }}</a></li>
+      {% endfor %}
+    </ul>
+  </div>
+</footer>

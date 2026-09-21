@@ -1,0 +1,123 @@
+@use "variables" as *;
+
+// ── Header ──────────────────────────────────────────────
+.site-header {
+  background: $color-surface;
+  border-bottom: 1px solid $color-border;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.site-header__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-block: 1rem;
+}
+
+.site-header__brand {
+  font-weight: $font-weight-bold;
+  font-size: 1.1rem;
+  color: $color-text;
+
+  &:hover {
+    text-decoration: none;
+  }
+}
+
+.site-header__nav {
+  display: flex;
+  gap: 1.5rem;
+
+  a {
+    color: $color-muted;
+    font-weight: 500;
+
+    &:hover {
+      color: $color-text;
+      text-decoration: none;
+    }
+  }
+}
+
+// ── Footer ──────────────────────────────────────────────
+.site-footer {
+  border-top: 1px solid $color-border;
+  margin-top: $spacing-section;
+  padding-block: 2rem;
+  color: $color-muted;
+  font-size: 0.9rem;
+}
+
+.site-footer__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.site-footer__social {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  gap: 1.25rem;
+}
+
+// ── Hero ────────────────────────────────────────────────
+.hero {
+  padding-block: $spacing-section;
+}
+
+.hero__title {
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  margin-bottom: 1rem;
+}
+
+.hero__lede {
+  font-size: 1.35rem;
+  color: $color-muted;
+  max-width: 38rem;
+  margin-bottom: 2rem;
+}
+
+.hero__actions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+// ── Sections ────────────────────────────────────────────
+.section {
+  padding-block: $spacing-section;
+}
+
+.section--alt {
+  background: $color-surface;
+  border-block: 1px solid $color-border;
+}
+
+.section__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+}
+
+.section__title {
+  font-size: 1.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.section__head .section__title {
+  margin-bottom: 0;
+}
+
+.about-teaser {
+  p {
+    margin-bottom: 1.5rem;
+    color: $color-muted;
+    font-size: 1.1rem;
+  }
+}
