@@ -13,6 +13,9 @@ module.exports = function (eleventyConfig) {
     "node_modules/@astryxdesign/core/src/reset.css": "css/reset.css",
     "node_modules/@astryxdesign/core/dist/astryx.css": "css/astryx.css",
     "node_modules/@astryxdesign/theme-neutral/dist/theme.css": "css/theme.css",
+    // Approved one-rule exception: applies the theme's own default body font
+    // (the stock theme never sets it, leaving serif fallbacks). See css file.
+    "src/css/body-font.css": "css/body-font.css",
   });
 
   // URL prefix for project-pages deploys (e.g. /portfolio-site/). Always

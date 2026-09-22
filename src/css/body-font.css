@@ -1,0 +1,10 @@
+/* Astryx neutral theme gap fix (approved exception to the no-custom-CSS rule).
+ *
+ * The stock neutral theme defines --font-family-body (Figtree) but never
+ * applies it to the page body. Components styled with `font-family: inherit`
+ * (SideNav items, Buttons) therefore fall back to the browser's default serif.
+ * This single rule applies the theme's own declared default font to the body.
+ * Nothing else is customized. */
+body {
+  font-family: var(--font-family-body);
+}

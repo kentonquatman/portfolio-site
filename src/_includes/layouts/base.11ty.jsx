@@ -99,6 +99,10 @@ export default function BaseLayout(data) {
         <link rel="stylesheet" href={`${d.pathPrefix}css/reset.css`} />
         <link rel="stylesheet" href={`${d.pathPrefix}css/astryx.css`} />
         <link rel="stylesheet" href={`${d.pathPrefix}css/theme.css`} />
+        {/* Approved one-rule exception: applies the theme's own default body
+            font. The stock neutral theme never sets it, so components using
+            font-family: inherit (SideNav items, Buttons) fell back to serif. */}
+        <link rel="stylesheet" href={`${d.pathPrefix}css/body-font.css`} />
         <script
           id="page-data"
           type="application/json"
