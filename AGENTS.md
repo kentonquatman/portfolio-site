@@ -31,3 +31,6 @@ MORE CLI:
   swizzle <Name>     eject component source for deep customization
   upgrade --apply    run after any Astryx or integration dependency bump
 <!-- ASTRYX:END -->
+
+## Approved exception (2026-09-22)
+`src/css/body-font.css` is a one-rule, user-approved exception to the no-custom-CSS rule: the stock neutral theme defines `--font-family-body` (Figtree) but never applies it to `body`, so components using `font-family: inherit` (SideNav items, Buttons) fell back to the browser serif default. The file only applies the theme's own declared default font to `body`. Do not remove it, and do not add further custom CSS without asking.
