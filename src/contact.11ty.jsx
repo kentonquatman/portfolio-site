@@ -2,7 +2,7 @@
 layout: layouts/base.11ty.jsx
 title: Contact
 ---
-// Contact page: centered card with email action and social links.
+// Contact page: email action and social links.
 // Default Astryx styling only — no custom CSS.
 import { Section, VStack, HStack } from "@astryxdesign/core/Layout";
 import { Heading } from "@astryxdesign/core/Heading";
@@ -17,31 +17,33 @@ export default function Contact(data) {
   const { site } = data;
   return (
     <Section paddingBlock={10}>
-      <VStack gap={5} hAlign="center">
-        <VStack gap={3} hAlign="center">
+      <VStack gap={5}>
+        <VStack gap={3}>
           <Text type="supporting" color="secondary">
             Contact
           </Text>
-          <Heading level={1} type="display-1" justify="center">
+          <Heading level={1} type="display-1">
             Let's work together.
           </Heading>
-          <Text type="large" color="secondary" justify="center" textWrap="balance">
+          <Text type="large" color="secondary" textWrap="balance">
             I'm currently open to new opportunities and freelance projects.
             The fastest way to reach me is by email.
           </Text>
         </VStack>
-        <Button
-          variant="primary"
-          label={site.email}
-          href={`mailto:${site.email}`}
-          endContent={<Icon icon={EnvelopeIcon} size="sm" color="inherit" />}
-        />
+        <HStack>
+          <Button
+            variant="primary"
+            label={site.email}
+            href={`mailto:${site.email}`}
+            endContent={<Icon icon={EnvelopeIcon} size="sm" color="inherit" />}
+          />
+        </HStack>
         <Divider />
-        <VStack gap={3} hAlign="center">
+        <VStack gap={3}>
           <Text type="supporting" color="secondary">
             Elsewhere
           </Text>
-          <HStack gap={4} hAlign="center">
+          <HStack gap={4}>
             {site.social.map((link) => (
               <Link
                 key={link.url}

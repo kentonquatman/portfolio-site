@@ -1,7 +1,8 @@
 // Shared Astryx-based building blocks for the portfolio.
 // Default Astryx styling only — no custom CSS, no overrides.
 import { HStack, VStack } from "@astryxdesign/core/Layout";
-import { TopNav, TopNavHeading, TopNavItem } from "@astryxdesign/core/TopNav";
+import { SideNav, SideNavHeading, SideNavItem, SideNavSection } from "@astryxdesign/core/SideNav";
+import { NavIcon } from "@astryxdesign/core/NavIcon";
 import { Card } from "@astryxdesign/core/Card";
 import { Heading } from "@astryxdesign/core/Heading";
 import { Text } from "@astryxdesign/core/Text";
@@ -13,13 +14,18 @@ import {
   ShoppingBagIcon,
   SwatchIcon,
   Squares2X2Icon,
+  HomeIcon,
+  FolderIcon,
+  UserIcon,
+  EnvelopeIcon,
+  BriefcaseIcon,
 } from "@heroicons/react/24/outline";
 
 const NAV_ITEMS = [
-  { label: "Home", slug: "" },
-  { label: "Work", slug: "work/" },
-  { label: "About", slug: "about/" },
-  { label: "Contact", slug: "contact/" },
+  { label: "Home", slug: "", icon: HomeIcon },
+  { label: "Work", slug: "work/", icon: FolderIcon },
+  { label: "About", slug: "about/", icon: UserIcon },
+  { label: "Contact", slug: "contact/", icon: EnvelopeIcon },
 ];
 
 // Visual anchor per project, keyed by the project file slug.
@@ -29,31 +35,57 @@ const PROJECT_ICONS = {
   "design-system": SwatchIcon,
 };
 
-// Top navigation rendered in the AppShell topNav slot. AppShell generates
-// the mobile nav drawer from this automatically below the md breakpoint.
-export function SiteTopNav({ site, pathPrefix, pageUrl }) {
+// Left navigation rendered in the AppShell sideNav slot. AppShell moves the
+// SideNav into a mobile drawer automatically below the md breakpoint.
+export function SiteSideNav({ site, pathPrefix, pageUrl, projects }) {
   return (
-    <TopNav
-      label="Primary"
-      heading={
-        <TopNavHeading heading={site.name} headingHref={pathPrefix} />
+    <SideNav
+      header={
+        <SideNavHeading
+          icon={<NavIcon icon={<Icon icon={BriefcaseIcon} size="sm" color="inherit" />} />}
+          heading={site.name}
+          headingHref={pathPrefix}
+        />
       }
     >
-      {NAV_ITEMS.map((item) => {
-        const href = `${pathPrefix}${item.slug}`;
-        // page.url may or may not include the path prefix depending on the
-        // 11ty version, so match against both forms.
-        const isSelected = pageUrl === href || pageUrl === `/${item.slug}`;
-        return (
-          <TopNavItem
-            key={href}
-            label={item.label}
-            href={href}
-            isSelected={isSelected}
-          />
-        );
-      })}
-    </TopNav>
+      <SideNavSection title="Main" isHeaderHidden>
+        {NAV_ITEMS.map((item) => {
+          const href = `${pathPrefix}${item.slug}`;
+          // page.url may or may not include the path prefix depending on the
+          // 11ty version, so match against both forms.
+          const isSelected = pageUrl === href || pageUrl === `/${item.slug}`;
+          return (
+            <SideNavItem
+              key={href}
+              label={item.label}
+              href={href}
+              icon={item.icon}
+              isSelected={isSelected}
+            />
+          );
+        })}
+      </SideNavSection>
+      <SideNavSection title="Projects">
+        {projects.map((project) => {
+          // Collection item URLs never include the path prefix, so prepend it
+          // the same way the nav links do.
+          const href = `${pathPrefix}${project.url.replace(/^\//, "")}`;
+          const isSelected = pageUrl === href || pageUrl === project.url;
+          // project.url looks like /projects/banking-app/ — take the last segment.
+          const slug = project.url.split("/").filter(Boolean).pop();
+          const ProjectIcon = PROJECT_ICONS[slug] || Squares2X2Icon;
+          return (
+            <SideNavItem
+              key={href}
+              label={project.data.title}
+              href={href}
+              icon={ProjectIcon}
+              isSelected={isSelected}
+            />
+          );
+        })}
+      </SideNavSection>
+    </SideNav>
   );
 }
 

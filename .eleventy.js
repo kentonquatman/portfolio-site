@@ -13,9 +13,6 @@ module.exports = function (eleventyConfig) {
     "node_modules/@astryxdesign/core/src/reset.css": "css/reset.css",
     "node_modules/@astryxdesign/core/dist/astryx.css": "css/astryx.css",
     "node_modules/@astryxdesign/theme-neutral/dist/theme.css": "css/theme.css",
-    // Document base font (applies the theme's own --font-family-body token;
-    // the stock theme never sets it on body itself).
-    "src/css/base.css": "css/base.css",
   });
 
   // URL prefix for project-pages deploys (e.g. /portfolio-site/). Always
@@ -27,6 +24,23 @@ module.exports = function (eleventyConfig) {
 
   // Current year for the footer
   eleventyConfig.addShortcode("year", () => new Date().getFullYear());
+
+  // Client bundle: hydrates each page in the browser so stock Astryx
+  // interactivity (AppShell mobile drawer, focus management) works on the
+  // static output. Built after 11ty writes so _site/js/client.js ships with
+  // every build, including `eleventy --serve` rebuilds.
+  eleventyConfig.on("eleventy.after", () => {
+    buildSync({
+      entryPoints: [path.join(__dirname, "src", "client.jsx")],
+      bundle: true,
+      platform: "browser",
+      format: "iife",
+      jsx: "automatic",
+      minify: true,
+      absWorkingDir: __dirname,
+      outfile: path.join(__dirname, "_site", "js", "client.js"),
+    });
+  });
 
   // Projects collection, ordered by the `order` front matter field
   eleventyConfig.addCollection("projects", (collectionApi) =>
@@ -87,8 +101,8 @@ module.exports = function (eleventyConfig) {
         const mod = await import(
           pathToFileURL(tmpFile).href + `?v=${mtimeMs}`
         );
-        const { renderToStaticMarkup } = await import("react-dom/server");
-        const html = renderToStaticMarkup(mod.default(data));
+        const { renderToString } = await import("react-dom/server");
+        const html = renderToString(mod.default(data));
         return html.startsWith("<html") ? "<!DOCTYPE html>\n" + html : html;
       };
     },

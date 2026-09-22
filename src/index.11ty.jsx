@@ -2,7 +2,7 @@
 layout: layouts/base.11ty.jsx
 title: Home
 ---
-// Home page: centered hero, selected work grid, about teaser.
+// Home page: left-aligned hero, selected work grid, about teaser.
 // Default Astryx styling only — no custom CSS.
 import { Section, VStack, HStack } from "@astryxdesign/core/Layout";
 import { Grid } from "@astryxdesign/core/Grid";
@@ -21,30 +21,22 @@ export default function Home(data) {
   return (
     <>
       <Section paddingBlock={10}>
-        <VStack gap={6} hAlign="center">
-          <Avatar name={site.name} size="xl" />
-          <VStack gap={3} hAlign="center">
-            <Text type="supporting" color="secondary">
-              {site.role}
-            </Text>
-            <Heading
-              level={1}
-              type="display-2"
-              justify="center"
-              textWrap="balance"
-            >
-              Hi, I'm {site.name}.
-            </Heading>
-            <Text
-              type="large"
-              color="secondary"
-              justify="center"
-              textWrap="balance"
-            >
-              {site.tagline}
-            </Text>
-          </VStack>
-          <HStack gap={3} hAlign="center">
+        <VStack gap={6}>
+          <HStack gap={5} vAlign="center">
+            <Avatar name={site.name} size="xl" />
+            <VStack gap={2}>
+              <Text type="supporting" color="secondary">
+                {site.role}
+              </Text>
+              <Heading level={1} type="display-2" textWrap="balance">
+                Hi, I'm {site.name}.
+              </Heading>
+            </VStack>
+          </HStack>
+          <Text type="large" color="secondary" textWrap="balance">
+            {site.tagline}
+          </Text>
+          <HStack gap={3}>
             <Button
               variant="primary"
               label="View my work"

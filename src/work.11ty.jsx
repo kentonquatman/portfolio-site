@@ -2,7 +2,7 @@
 layout: layouts/base.11ty.jsx
 title: Work
 ---
-// Work page: centered intro over a uniform project grid.
+// Work page: left-aligned intro over a uniform project grid.
 // Default Astryx styling only — no custom CSS.
 import { Section, VStack } from "@astryxdesign/core/Layout";
 import { Grid } from "@astryxdesign/core/Grid";
@@ -15,14 +15,14 @@ export default function Work(data) {
   return (
     <>
       <Section paddingBlock={8}>
-        <VStack gap={3} hAlign="center">
+        <VStack gap={3}>
           <Text type="supporting" color="secondary">
             Portfolio
           </Text>
-          <Heading level={1} type="display-1" justify="center">
+          <Heading level={1} type="display-1">
             Work
           </Heading>
-          <Text type="large" color="secondary" justify="center" textWrap="balance">
+          <Text type="large" color="secondary" textWrap="balance">
             A selection of projects spanning product design, design systems,
             and UX research.
           </Text>
