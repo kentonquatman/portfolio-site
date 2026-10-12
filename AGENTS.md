@@ -3,7 +3,7 @@
 Project-specific guidance for AI coding agents.
 
 <!-- ASTRYX:START -->
-Astryx v0.6.2 · 164 components
+Astryx v0.6.3 · 164 components
 CLI: run every command as `npx astryx <cmd>` (shown below as `astryx ...`).
 
 SETUP (once, in your app entry e.g. main.tsx) — without these, components render unstyled:
@@ -32,5 +32,5 @@ MORE CLI:
   upgrade --apply    run after any Astryx or integration dependency bump
 <!-- ASTRYX:END -->
 
-## Approved exception (2026-09-22)
-`src/css/body-font.css` is a one-rule, user-approved exception to the no-custom-CSS rule: the stock neutral theme defines `--font-family-body` (Figtree) but never applies it to `body`, so components using `font-family: inherit` (SideNav items, Buttons) fell back to the browser serif default. The file only applies the theme's own declared default font to `body`. Do not remove it, and do not add further custom CSS without asking.
+## Former exception, removed (2026-10-12)
+`src/css/body-font.css` was a one-rule, user-approved exception to the no-custom-CSS rule (added 2026-09-22): the stock neutral theme defined `--font-family-body` (Figtree) but never applied it, so components using `font-family: inherit` (SideNav items, Buttons) fell back to the browser serif default. Upstream fix #6450 in Astryx 0.6.3 now applies the theme body font to the theme scope root (`:scope { font-family: var(--font-family-body); }` inside `@scope ([data-astryx-theme="neutral"])`), which made the workaround redundant. The file, its passthrough copy, and its `<link>` reference were removed on 2026-10-12 after verifying the stock theme covers it. No custom CSS remains anywhere on the site; do not add any without asking.
