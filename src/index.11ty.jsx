@@ -2,114 +2,84 @@
 layout: layouts/base.11ty.jsx
 title: Home
 ---
-// Home page: left-aligned hero, selected work grid, about teaser.
-// Default Astryx styling only — no custom CSS.
+// Home page: a one-sentence statement at display scale, then the whole
+// portfolio as a single scroll of full-width project features — the
+// pattern shared by the example portfolios (Aaron James, Robin
+// Clediere, Laura Javier): no card grid, no profile widget, media first
+// per project. Default Astryx styling only — no custom CSS.
 import { Section, VStack, HStack } from "@astryxdesign/core/Layout";
-import { Grid } from "@astryxdesign/core/Grid";
 import { Heading } from "@astryxdesign/core/Heading";
 import { Text } from "@astryxdesign/core/Text";
 import { Button } from "@astryxdesign/core/Button";
-import { Link } from "@astryxdesign/core/Link";
-import { Icon } from "@astryxdesign/core/Icon";
-import { Avatar } from "@astryxdesign/core/Avatar";
-import { Card } from "@astryxdesign/core/Card";
 import { Token } from "@astryxdesign/core/Token";
-import { ArrowRightIcon } from "@heroicons/react/24/outline";
+import { Divider } from "@astryxdesign/core/Divider";
+import { ProjectFeature } from "./_includes/components.jsx";
 
 // The three things this portfolio focuses on, at a glance — product
-// thinking, interaction design, and visual design. Nothing else competes
-// with them on the home page.
+// thinking, interaction design, and visual design.
 const FOCUS_AREAS = ["Product thinking", "Interaction design", "Visual design"];
-import { ProjectCard } from "./_includes/components.jsx";
 
 export default function Home(data) {
   const { site, collections, pathPrefix } = data;
+  const projects = collections.projects;
   return (
     <>
       <Section paddingBlock={10}>
         <VStack gap={6}>
-          <HStack gap={5} vAlign="center">
-            <Avatar name={site.name} size="xl" />
-            <VStack gap={2}>
-              <Text type="supporting" color="secondary">
-                {site.role}
-              </Text>
-              <Heading level={1} type="display-2" textWrap="balance">
-                Hi, I'm {site.name}.
-              </Heading>
-            </VStack>
-          </HStack>
-          <Text type="large" color="secondary" textWrap="balance">
-            {site.tagline}
+          <Text type="supporting" color="secondary">
+            {site.name} — {site.role}, {site.location}
           </Text>
+          <Heading level={1} type="display-1" textWrap="balance">
+            {site.tagline}
+          </Heading>
           <HStack gap={2} wrap="wrap">
             {FOCUS_AREAS.map((area) => (
               <Token key={area} label={area} />
             ))}
           </HStack>
-          <HStack gap={3}>
-            <Button
-              variant="primary"
-              label="View my work"
-              href={`${pathPrefix}work/`}
-              endContent={
-                <Icon icon={ArrowRightIcon} size="sm" color="inherit" />
-              }
-            />
-            <Button
-              variant="secondary"
-              label="Get in touch"
-              href={`${pathPrefix}contact/`}
-            />
+        </VStack>
+      </Section>
+
+      <Section>
+        <VStack gap={8}>
+          <HStack hAlign="between" vAlign="center">
+            <Heading level={2}>Selected work</Heading>
+            <Text type="supporting" color="secondary">
+              {projects.length} projects · each a different strength
+            </Text>
           </HStack>
+          {projects.map((project, i) => (
+            <VStack key={project.page.url} gap={8}>
+              {i > 0 && <Divider />}
+              <ProjectFeature project={project} pathPrefix={pathPrefix} />
+            </VStack>
+          ))}
         </VStack>
       </Section>
 
       <Section>
         <VStack gap={4}>
-          <HStack hAlign="between" vAlign="center">
-            <Heading level={2}>Selected work</Heading>
-            <Link href={`${pathPrefix}work/`}>All projects</Link>
-          </HStack>
-          <Text color="secondary">
-            A small selection on purpose — three projects, each one chosen to
-            show a different strength.
+          <Divider />
+          <Heading level={2} type="display-3" textWrap="balance">
+            A little about me
+          </Heading>
+          <Text type="large" color="secondary" textWrap="balance">
+            A short paragraph about who you are, what you care about, and how
+            you like to work goes here.
           </Text>
-          <Grid columns={{ minWidth: 280, repeat: "fit" }} gap={4}>
-            {collections.projects.map((project) => (
-              <ProjectCard
-                key={project.page.url}
-                project={project}
-                pathPrefix={pathPrefix}
-              />
-            ))}
-          </Grid>
-        </VStack>
-      </Section>
-
-      <Section>
-        <Card>
-          <HStack gap={6} vAlign="center">
-            <Avatar name={site.name} size="lg" />
-            <VStack gap={3}>
-              <Heading level={2}>A little about me</Heading>
-              <Text color="secondary">
-                A short paragraph about who you are, what you care about, and
-                how you like to work goes here.
-              </Text>
-              <HStack>
-                <Button
-                  variant="secondary"
-                  label="More about me"
-                  href={`${pathPrefix}about/`}
-                  endContent={
-                    <Icon icon={ArrowRightIcon} size="sm" color="inherit" />
-                  }
-                />
-              </HStack>
-            </VStack>
+          <HStack gap={3}>
+            <Button
+              variant="secondary"
+              label="More about me"
+              href={`${pathPrefix}about/`}
+            />
+            <Button
+              variant="primary"
+              label="Get in touch"
+              href={`${pathPrefix}contact/`}
+            />
           </HStack>
-        </Card>
+        </VStack>
       </Section>
     </>
   );

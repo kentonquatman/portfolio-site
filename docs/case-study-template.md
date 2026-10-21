@@ -29,7 +29,9 @@ solution, prototype, outcome — and put the major points at the beginning.**
    (Challenge version: can you say it in 100?)
 3. **Major points first.** Everything noteworthy should be “above the
    fold” — before the point where most readers drop off. On this site the
-   layout enforces it: Problem → Outcome → Solution → Prototype → Story.
+   layout enforces it: the problem is the headline, the prototype media
+   follows it immediately at full width, and Outcome is the first block
+   of the body.
 4. **Plain language.** State the problem so someone outside technology or
    design — or a child — could understand it. No jargon, no acronyms.
 5. **Process gets one sentence.** Process is the #1 thing portfolios
@@ -120,18 +122,18 @@ or changed the outcome.]
 
 | Order on page | Comes from | Why |
 |---|---|---|
-| Highlight label + title | `highlight`, `title` | The strength is visible at a glance |
-| Role / Timeline / Team strip | `role`, `timeline`, `team` | Supporting facts, kept small — not a “My Role” section |
-| **Problem** (headline) | `problem` | Succinct, plain-language, first |
-| **Outcome** (callout card) | `outcome` | The result before the detail, in case they read no further |
+| Title (display-1) + highlight label | `title`, `highlight` | The project and its strength, at a glance |
+| **Problem** (display-2 headline) | `problem` | Succinct, plain-language, stated as the headline — the reference example's pattern |
+| **Prototype media** (full-width 16:9 panel + link) | `prototype`, `prototypeUrl` | Media first and large, like every example portfolio; interactive evidence of craft |
+| **Outcome** (first body block) | `outcome` | The result before the supporting detail, in case they read no further |
 | **Solution** | `solution` | Brief: problem → solution is the core story |
 | Process line | `process` | Exactly one sentence, rendered as small supporting text |
-| **Prototype** | `prototype`, `prototypeUrl` | Interactive evidence of craft, with every project |
 | The story | Markdown body | Optional short narrative — no outline headings |
+| Details rail (Role / Timeline / Team / Focus / Prototype) | `role`, `timeline`, `team`, `highlight`, `prototype` | Supporting facts in a side rail — not a “My Role” section |
 
-Project cards on Home and Work reuse `highlight`, `problem`, and
-`outcome`, so a reviewer gets the problem and the result from the card
-without opening the page.
+Home and Work present each project as a full-width feature — media
+panel, problem, and outcome — so a reviewer gets the problem and the
+result without opening the page.
 
 ## Worked example (placeholder, as shipped)
 

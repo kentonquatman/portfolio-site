@@ -3,24 +3,29 @@ layout: layouts/base.11ty.jsx
 ---
 // Case-study layout for Markdown project files.
 //
-// Structure follows the portfolio guidance in
-// docs/case-study-template.md (from "Building an Excellent Online
-// Portfolio"): tell a story with only four elements — problem, outcome,
-// solution, prototype — and put the major points first, above the fold.
-// There is no process section: `process` is a single sentence by design.
-// Default Astryx styling only — no custom CSS.
+// Redesigned 2026-10-21 after the example portfolios linked from
+// "Building an Excellent Online Portfolio" and the chapter's own worked
+// example (Garron Engstrom): media first and large, the problem as the
+// big headline, the solution as supporting text, everything noteworthy
+// before the reader drops off. The four elements — problem, outcome,
+// solution, prototype — and at most one sentence of process
+// (docs/case-study-template.md). Default Astryx styling only.
 import { HStack, VStack, Section } from "@astryxdesign/core/Layout";
+import { Grid } from "@astryxdesign/core/Grid";
 import { Heading } from "@astryxdesign/core/Heading";
 import { Text } from "@astryxdesign/core/Text";
 import { Link } from "@astryxdesign/core/Link";
 import { Button } from "@astryxdesign/core/Button";
 import { Divider } from "@astryxdesign/core/Divider";
-import { Card } from "@astryxdesign/core/Card";
 import { Token } from "@astryxdesign/core/Token";
 import { Icon } from "@astryxdesign/core/Icon";
-import { Breadcrumbs, BreadcrumbItem } from "@astryxdesign/core/Breadcrumbs";
-import { PlayCircleIcon, ArrowRightIcon } from "@heroicons/react/24/outline";
-import { ProjectCard, RawHtml } from "../components.jsx";
+import { ArrowRightIcon, ArrowLeftIcon } from "@heroicons/react/24/outline";
+import {
+  ProjectMedia,
+  NextProject,
+  RawHtml,
+  projectSlug,
+} from "../components.jsx";
 
 function MetaItem({ label, value }) {
   return (
@@ -66,96 +71,93 @@ export default function CaseStudyLayout(data) {
   const projects = data.collections?.projects ?? [];
   const index = projects.findIndex((p) => p.page.url === page.url);
   const next = projects[(index + 1) % projects.length];
+  const slug = page.url.split("/").filter(Boolean).pop();
   return (
     <Section paddingBlock={6}>
-      <VStack gap={6}>
-        <Breadcrumbs variant="supporting">
-          <BreadcrumbItem href={`${pathPrefix}`}>Home</BreadcrumbItem>
-          <BreadcrumbItem href={`${pathPrefix}work/`}>Work</BreadcrumbItem>
-          <BreadcrumbItem>{title}</BreadcrumbItem>
-        </Breadcrumbs>
+      <VStack gap={8}>
+        <HStack hAlign="between" vAlign="center">
+          <Link href={`${pathPrefix}work/`}>
+            <Icon icon={ArrowLeftIcon} size="sm" color="inherit" /> All work
+          </Link>
+          {highlight && <Token label={highlight} />}
+        </HStack>
 
-        <VStack gap={3}>
-          <HStack gap={3} vAlign="center">
-            <Text type="supporting" color="secondary">
-              Case study
-            </Text>
-            {highlight && <Token label={highlight} />}
-          </HStack>
+        <VStack gap={4}>
+          <Text type="supporting" color="secondary">
+            Case study · {role} · {timeline}
+          </Text>
           <Heading level={1} type="display-1" textWrap="balance">
             {title}
           </Heading>
-        </VStack>
-
-        <Card variant="muted">
-          <HStack gap={6}>
-            <MetaItem label="Role" value={role} />
-            <MetaItem label="Timeline" value={timeline} />
-            <MetaItem label="Team" value={team} />
-          </HStack>
-        </Card>
-
-        {/* Above the fold: the problem in plain language, then the
-            outcome — the two things a reviewer needs first. */}
-        <StoryBlock label="Problem">
-          <Heading level={2} textWrap="balance">
+          {/* The problem is the headline — stated the way the reference
+              example states it, large enough to be understood at a
+              glance, in plain language. */}
+          <Heading level={2} type="display-2" textWrap="balance">
             {problem}
           </Heading>
-        </StoryBlock>
+        </VStack>
 
-        <Card>
-          <StoryBlock label="Outcome">{outcome && <Text type="large">{outcome}</Text>}</StoryBlock>
-        </Card>
-
-        <StoryBlock label="Solution">
-          <Text type="large" color="secondary" textWrap="balance">
-            {solution}
-          </Text>
-          {process && (
+        {/* Media first, at full width: the prototype is the evidence of
+            craft, so it leads — not a section halfway down the page. */}
+        <VStack gap={3}>
+          <ProjectMedia slug={slug} title={title} caption={prototype} />
+          {prototypeUrl ? (
+            <HStack>
+              <Button
+                variant="primary"
+                label="View prototype"
+                href={prototypeUrl}
+                target="_blank"
+                rel="noopener"
+                endContent={
+                  <Icon icon={ArrowRightIcon} size="sm" color="inherit" />
+                }
+              />
+            </HStack>
+          ) : (
             <Text type="supporting" color="secondary">
-              Process, in one sentence: {process}
+              Prototype placeholder — add a `prototypeUrl` in the project file
+              to link the animated prototype or live product here. Every
+              project should have one.
             </Text>
           )}
-        </StoryBlock>
+        </VStack>
 
-        <VStack gap={3}>
-          <Heading level={2}>Prototype</Heading>
-          <Card variant="muted">
-            <VStack gap={3}>
-              <Icon icon={PlayCircleIcon} size="lg" color="secondary" />
-              <Text>{prototype}</Text>
-              {prototypeUrl ? (
-                <HStack>
-                  <Button
-                    variant="primary"
-                    label="View prototype"
-                    href={prototypeUrl}
-                    target="_blank"
-                    rel="noopener"
-                    endContent={
-                      <Icon icon={ArrowRightIcon} size="sm" color="inherit" />
-                    }
-                  />
-                </HStack>
-              ) : (
+        <Grid columns={{ minWidth: 320, repeat: "fit" }} gap={8}>
+          <VStack gap={6}>
+            <StoryBlock label="Outcome">
+              <Text type="large">{outcome}</Text>
+            </StoryBlock>
+            <StoryBlock label="Solution">
+              <Text color="secondary">{solution}</Text>
+              {process && (
                 <Text type="supporting" color="secondary">
-                  Prototype placeholder — add a `prototypeUrl` in the project
-                  file to link the animated prototype or live product here.
-                  Every project should have one.
+                  Process, in one sentence: {process}
                 </Text>
               )}
-            </VStack>
-          </Card>
-        </VStack>
+            </StoryBlock>
+            <StoryBlock label="The story">
+              <RawHtml html={content} />
+            </StoryBlock>
+          </VStack>
 
-        <Divider />
-
-        {/* Optional short narrative only — no outline sections. The
-            template targets ~200 words for the whole page. */}
-        <VStack gap={3}>
-          <Heading level={2}>The story</Heading>
-          <RawHtml html={content} />
-        </VStack>
+          <VStack gap={4}>
+            <Heading level={3}>Details</Heading>
+            <MetaItem label="Role" value={role} />
+            <Divider />
+            <MetaItem label="Timeline" value={timeline} />
+            <Divider />
+            <MetaItem label="Team" value={team} />
+            <Divider />
+            <MetaItem label="Focus" value={highlight} />
+            <Divider />
+            <StoryBlock label="Prototype">
+              <Text type="supporting" color="secondary">
+                {prototype}
+              </Text>
+            </StoryBlock>
+          </VStack>
+        </Grid>
 
         <Divider />
 
@@ -165,7 +167,7 @@ export default function CaseStudyLayout(data) {
             <Link href={`${pathPrefix}work/`}>All projects</Link>
           </HStack>
           {next && (
-            <ProjectCard
+            <NextProject
               key={next.page.url}
               project={next}
               pathPrefix={pathPrefix}

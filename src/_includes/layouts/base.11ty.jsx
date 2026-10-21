@@ -1,14 +1,21 @@
-// Base document frame: AppShell owns the side navigation and page landmarks,
+// Base document frame: AppShell owns the top navigation and page landmarks,
 // Layout constrains the content column and footer. Default Astryx styling
 // only — no custom CSS.
 //
+// Navigation is a shallow, stable TopNav (Work / About / Contact), not a
+// sidebar: the frame the example portfolios use, and the case Astryx's
+// layout guidance gives for TopNav. The content column is wide (1200) so
+// project media can run at the scale those examples use; prose sections
+// cap their own width through grid columns inside the pages.
+//
 // The page is server-rendered to static HTML, then hydrated in the browser
-// (see src/client.jsx) so AppShell's responsive behavior — the mobile
-// navigation drawer below the md breakpoint — works. All interactivity comes
-// from stock Astryx; there is no custom client JavaScript of our own.
+// (see src/client.jsx) so AppShell's responsive behavior — the compact
+// mobile nav bar and drawer below the md breakpoint — works. All
+// interactivity comes from stock Astryx; there is no custom client
+// JavaScript of our own.
 import { AppShell } from "@astryxdesign/core/AppShell";
 import { Layout } from "@astryxdesign/core/Layout";
-import { SiteSideNav, SiteFooter, RawHtml } from "../components.jsx";
+import { SiteTopNav, SiteFooter, RawHtml } from "../components.jsx";
 
 // The fields the client needs to re-render the identical tree during
 // hydration. Collection items are sanitized because 11ty's full objects are
@@ -57,17 +64,17 @@ export function PageBody(data) {
   return (
     <AppShell
       height="auto"
-      sideNav={
-        <SiteSideNav
+      variant="section"
+      topNav={
+        <SiteTopNav
           site={d.site}
           pathPrefix={d.pathPrefix}
           pageUrl={d.page.url}
-          projects={d.collections.projects}
         />
       }
     >
       <Layout
-        contentWidth={960}
+        contentWidth={1200}
         footer={<SiteFooter site={d.site} year={d.year} />}
       >
         <RawHtml html={d.content} />

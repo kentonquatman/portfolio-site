@@ -2,8 +2,9 @@
 layout: layouts/base.11ty.jsx
 title: Contact
 ---
-// Contact page: email action and social links.
-// Default Astryx styling only — no custom CSS.
+// Contact page: one large statement, the email action, and social links
+// as a plain list — matching the minimal frames of the example
+// portfolios. Default Astryx styling only — no custom CSS.
 import { Section, VStack, HStack } from "@astryxdesign/core/Layout";
 import { Heading } from "@astryxdesign/core/Heading";
 import { Text } from "@astryxdesign/core/Text";
@@ -17,12 +18,12 @@ export default function Contact(data) {
   const { site } = data;
   return (
     <Section paddingBlock={10}>
-      <VStack gap={5}>
-        <VStack gap={3}>
+      <VStack gap={6}>
+        <VStack gap={4}>
           <Text type="supporting" color="secondary">
             Contact
           </Text>
-          <Heading level={1} type="display-1">
+          <Heading level={1} type="display-1" textWrap="balance">
             Let's work together.
           </Heading>
           <Text type="large" color="secondary" textWrap="balance">
@@ -43,18 +44,15 @@ export default function Contact(data) {
           <Text type="supporting" color="secondary">
             Elsewhere
           </Text>
-          <HStack gap={4}>
+          <VStack gap={2}>
             {site.social.map((link) => (
-              <Link
-                key={link.url}
-                href={link.url}
-                target="_blank"
-                rel="noopener"
-              >
-                {link.label}
-              </Link>
+              <Text key={link.url} type="large">
+                <Link href={link.url} target="_blank" rel="noopener">
+                  {link.label}
+                </Link>
+              </Text>
             ))}
-          </HStack>
+          </VStack>
         </VStack>
       </VStack>
     </Section>
