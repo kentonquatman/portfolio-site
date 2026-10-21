@@ -38,12 +38,23 @@ Set `ELEVENTY_PATH_PREFIX=/repo-name/` when deploying to a project subpath
   `src/_includes/components.jsx`
 - **Layouts**: `src/_includes/layouts/base.11ty.jsx`,
   `src/_includes/layouts/case-study.11ty.jsx`
-- **Case studies**: add Markdown files in `src/projects/` with this front matter:
+- **Case studies**: add Markdown files in `src/projects/`, following
+  [`docs/case-study-template.md`](docs/case-study-template.md) — the
+  guidelines and fill-in template for case-study content. In short: tell a
+  story with four elements only (problem, outcome, solution, prototype),
+  keep the whole page near 200 words, and spend at most one sentence on
+  process. Front matter:
 
   ```yaml
   ---
   title: Project title
-  summary: One or two sentences about the project.
+  highlight: Product thinking & strategy
+  problem: "The human problem, in one plain-language sentence."
+  solution: "What you made, in two or three sentences."
+  prototype: "What the prototype or live product shows."
+  prototypeUrl: "https://example.com/prototype"
+  outcome: "What changed for users or the business."
+  process: "Your whole process, in one sentence."
   role: Your role
   timeline: "2024 · 6 months"
   team: Who you worked with

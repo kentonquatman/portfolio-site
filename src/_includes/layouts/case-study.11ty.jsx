@@ -2,14 +2,24 @@
 layout: layouts/base.11ty.jsx
 ---
 // Case-study layout for Markdown project files.
+//
+// Structure follows the portfolio guidance in
+// docs/case-study-template.md (from "Building an Excellent Online
+// Portfolio"): tell a story with only four elements — problem, outcome,
+// solution, prototype — and put the major points first, above the fold.
+// There is no process section: `process` is a single sentence by design.
 // Default Astryx styling only — no custom CSS.
 import { HStack, VStack, Section } from "@astryxdesign/core/Layout";
 import { Heading } from "@astryxdesign/core/Heading";
 import { Text } from "@astryxdesign/core/Text";
 import { Link } from "@astryxdesign/core/Link";
+import { Button } from "@astryxdesign/core/Button";
 import { Divider } from "@astryxdesign/core/Divider";
 import { Card } from "@astryxdesign/core/Card";
+import { Token } from "@astryxdesign/core/Token";
+import { Icon } from "@astryxdesign/core/Icon";
 import { Breadcrumbs, BreadcrumbItem } from "@astryxdesign/core/Breadcrumbs";
+import { PlayCircleIcon, ArrowRightIcon } from "@heroicons/react/24/outline";
 import { ProjectCard, RawHtml } from "../components.jsx";
 
 function MetaItem({ label, value }) {
@@ -23,9 +33,36 @@ function MetaItem({ label, value }) {
   );
 }
 
+// Labelled narrative block: a small supporting label over its text, the
+// same pattern as the PROBLEM / SOLUTION labels in the reference example.
+function StoryBlock({ label, children }) {
+  return (
+    <VStack gap={2}>
+      <Text type="supporting" color="secondary">
+        {label}
+      </Text>
+      {children}
+    </VStack>
+  );
+}
+
 export default function CaseStudyLayout(data) {
-  const { title, summary, role, timeline, team, content, pathPrefix, page } =
-    data;
+  const {
+    title,
+    highlight,
+    problem,
+    solution,
+    prototype,
+    prototypeUrl,
+    outcome,
+    process,
+    role,
+    timeline,
+    team,
+    content,
+    pathPrefix,
+    page,
+  } = data;
   const projects = data.collections?.projects ?? [];
   const index = projects.findIndex((p) => p.page.url === page.url);
   const next = projects[(index + 1) % projects.length];
@@ -39,15 +76,15 @@ export default function CaseStudyLayout(data) {
         </Breadcrumbs>
 
         <VStack gap={3}>
-          <Text type="supporting" color="secondary">
-            Case study
-          </Text>
+          <HStack gap={3} vAlign="center">
+            <Text type="supporting" color="secondary">
+              Case study
+            </Text>
+            {highlight && <Token label={highlight} />}
+          </HStack>
           <Heading level={1} type="display-1" textWrap="balance">
             {title}
           </Heading>
-          <Text type="large" color="secondary">
-            {summary}
-          </Text>
         </VStack>
 
         <Card variant="muted">
@@ -58,9 +95,67 @@ export default function CaseStudyLayout(data) {
           </HStack>
         </Card>
 
+        {/* Above the fold: the problem in plain language, then the
+            outcome — the two things a reviewer needs first. */}
+        <StoryBlock label="Problem">
+          <Heading level={2} textWrap="balance">
+            {problem}
+          </Heading>
+        </StoryBlock>
+
+        <Card>
+          <StoryBlock label="Outcome">{outcome && <Text type="large">{outcome}</Text>}</StoryBlock>
+        </Card>
+
+        <StoryBlock label="Solution">
+          <Text type="large" color="secondary" textWrap="balance">
+            {solution}
+          </Text>
+          {process && (
+            <Text type="supporting" color="secondary">
+              Process, in one sentence: {process}
+            </Text>
+          )}
+        </StoryBlock>
+
+        <VStack gap={3}>
+          <Heading level={2}>Prototype</Heading>
+          <Card variant="muted">
+            <VStack gap={3}>
+              <Icon icon={PlayCircleIcon} size="lg" color="secondary" />
+              <Text>{prototype}</Text>
+              {prototypeUrl ? (
+                <HStack>
+                  <Button
+                    variant="primary"
+                    label="View prototype"
+                    href={prototypeUrl}
+                    target="_blank"
+                    rel="noopener"
+                    endContent={
+                      <Icon icon={ArrowRightIcon} size="sm" color="inherit" />
+                    }
+                  />
+                </HStack>
+              ) : (
+                <Text type="supporting" color="secondary">
+                  Prototype placeholder — add a `prototypeUrl` in the project
+                  file to link the animated prototype or live product here.
+                  Every project should have one.
+                </Text>
+              )}
+            </VStack>
+          </Card>
+        </VStack>
+
         <Divider />
 
-        <RawHtml html={content} />
+        {/* Optional short narrative only — no outline sections. The
+            template targets ~200 words for the whole page. */}
+        <VStack gap={3}>
+          <Heading level={2}>The story</Heading>
+          <RawHtml html={content} />
+        </VStack>
 
         <Divider />
 

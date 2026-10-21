@@ -13,7 +13,13 @@ import { Link } from "@astryxdesign/core/Link";
 import { Icon } from "@astryxdesign/core/Icon";
 import { Avatar } from "@astryxdesign/core/Avatar";
 import { Card } from "@astryxdesign/core/Card";
+import { Token } from "@astryxdesign/core/Token";
 import { ArrowRightIcon } from "@heroicons/react/24/outline";
+
+// The three things this portfolio focuses on, at a glance — product
+// thinking, interaction design, and visual design. Nothing else competes
+// with them on the home page.
+const FOCUS_AREAS = ["Product thinking", "Interaction design", "Visual design"];
 import { ProjectCard } from "./_includes/components.jsx";
 
 export default function Home(data) {
@@ -36,6 +42,11 @@ export default function Home(data) {
           <Text type="large" color="secondary" textWrap="balance">
             {site.tagline}
           </Text>
+          <HStack gap={2} wrap="wrap">
+            {FOCUS_AREAS.map((area) => (
+              <Token key={area} label={area} />
+            ))}
+          </HStack>
           <HStack gap={3}>
             <Button
               variant="primary"
@@ -60,6 +71,10 @@ export default function Home(data) {
             <Heading level={2}>Selected work</Heading>
             <Link href={`${pathPrefix}work/`}>All projects</Link>
           </HStack>
+          <Text color="secondary">
+            A small selection on purpose — three projects, each one chosen to
+            show a different strength.
+          </Text>
           <Grid columns={{ minWidth: 280, repeat: "fit" }} gap={4}>
             {collections.projects.map((project) => (
               <ProjectCard

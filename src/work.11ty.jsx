@@ -23,8 +23,11 @@ export default function Work(data) {
             Work
           </Heading>
           <Text type="large" color="secondary" textWrap="balance">
-            A selection of projects spanning product design, design systems,
-            and UX research.
+            Three projects, chosen on purpose. Each one highlights a
+            different aspect of design — product thinking, interaction
+            design, or visual design and systems — and each one is told the
+            same way: the problem, the outcome, the solution, and a
+            prototype.
           </Text>
         </VStack>
       </Section>

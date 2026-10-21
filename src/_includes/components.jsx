@@ -4,6 +4,7 @@ import { HStack, VStack } from "@astryxdesign/core/Layout";
 import { SideNav, SideNavHeading, SideNavItem, SideNavSection } from "@astryxdesign/core/SideNav";
 import { NavIcon } from "@astryxdesign/core/NavIcon";
 import { Card } from "@astryxdesign/core/Card";
+import { Token } from "@astryxdesign/core/Token";
 import { Heading } from "@astryxdesign/core/Heading";
 import { Text } from "@astryxdesign/core/Text";
 import { Link } from "@astryxdesign/core/Link";
@@ -110,7 +111,7 @@ export function SiteFooter({ site, year }) {
 }
 
 export function ProjectCard({ project, pathPrefix }) {
-  const { title, summary, role, timeline } = project.data;
+  const { title, highlight, problem, outcome, role, timeline } = project.data;
   // Collection item URLs never include the path prefix, so prepend it the
   // same way the nav links do.
   const href = `${pathPrefix}${project.url.replace(/^\//, "")}`;
@@ -124,11 +125,21 @@ export function ProjectCard({ project, pathPrefix }) {
     <Link href={href} color="inherit" display="block">
       <Card elevation="low">
         <VStack gap={3}>
-          <Icon icon={ProjectIcon} size="lg" color="secondary" />
+          <HStack hAlign="between" vAlign="center">
+            <Icon icon={ProjectIcon} size="lg" color="secondary" />
+            {highlight && <Token label={highlight} />}
+          </HStack>
           <VStack gap={1}>
             <Heading level={3}>{title}</Heading>
-            <Text type="supporting">{summary}</Text>
+            {/* At a glance: the human problem, then what changed. No
+                process, no outline — see docs/case-study-template.md. */}
+            <Text type="supporting">{problem}</Text>
           </VStack>
+          {outcome && (
+            <Text type="supporting">
+              Outcome: {outcome}
+            </Text>
+          )}
           <Text type="supporting" color="secondary">
             {role} · {timeline}
           </Text>

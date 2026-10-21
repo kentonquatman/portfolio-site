@@ -8,16 +8,19 @@ import { Section, VStack, HStack } from "@astryxdesign/core/Layout";
 import { Heading } from "@astryxdesign/core/Heading";
 import { Text } from "@astryxdesign/core/Text";
 import { Avatar } from "@astryxdesign/core/Avatar";
-import { Badge } from "@astryxdesign/core/Badge";
+import { Token } from "@astryxdesign/core/Token";
 import { Card } from "@astryxdesign/core/Card";
 
+// Focused on the three areas the portfolio itself focuses on — product
+// thinking, interaction design, visual design — plus the two supporting
+// crafts the case studies demonstrate. Process skills (research, testing,
+// workshops) are expected of every designer, so they are not listed here.
 const SKILLS = [
-  "UX Research",
+  "Product Thinking",
   "Interaction Design",
-  "Prototyping",
+  "Visual Design",
+  "Prototyping & Motion",
   "Design Systems",
-  "Usability Testing",
-  "Information Architecture",
 ];
 
 export default function About(data) {
@@ -48,9 +51,20 @@ export default function About(data) {
           <Heading level={2}>What I do</Heading>
           <HStack gap={2} wrap="wrap">
             {SKILLS.map((skill) => (
-              <Badge key={skill} variant="neutral" label={skill} />
+              <Token key={skill} label={skill} />
             ))}
           </HStack>
+        </VStack>
+      </Section>
+
+      <Section>
+        <VStack gap={3}>
+          <Heading level={2}>Process, in one sentence</Heading>
+          <Text color="secondary">
+            Placeholder: understand the human problem, design the simplest
+            thing that solves it, prototype it, and test it with the people
+            it is for — that is the whole process section, on purpose.
+          </Text>
         </VStack>
       </Section>
 
