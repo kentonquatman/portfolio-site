@@ -24,7 +24,6 @@ import {
   SwatchIcon,
   Squares2X2Icon,
   PlayCircleIcon,
-  ArrowRightIcon,
 } from "@heroicons/react/24/outline";
 
 const NAV_ITEMS = [
@@ -152,9 +151,11 @@ export function ProjectFeature({ project, pathPrefix }) {
   const slug = projectSlug(project);
   return (
     <VStack gap={5}>
-      <Link href={href} color="inherit" display="block">
-        <ProjectMedia slug={slug} title={title} caption={prototype} />
-      </Link>
+      {/* Not wrapped in a Link: AspectRatio collapses inside a
+          shrink-to-fit parent (its documented behaviour), which is what
+          hid the panel in the first visual check. The title and the
+          "View case study" link below carry navigation instead. */}
+      <ProjectMedia slug={slug} title={title} caption={prototype} />
       <Grid columns={{ minWidth: 320, repeat: "fit" }} gap={6}>
         <VStack gap={3}>
           {highlight && <Token label={highlight} />}
@@ -171,10 +172,7 @@ export function ProjectFeature({ project, pathPrefix }) {
           <Text type="large">{problem}</Text>
           {outcome && <Text color="secondary">Outcome: {outcome}</Text>}
           <HStack>
-            <Link href={href}>
-              View case study{" "}
-              <Icon icon={ArrowRightIcon} size="sm" color="inherit" />
-            </Link>
+            <Link href={href}>View case study</Link>
           </HStack>
         </VStack>
       </Grid>

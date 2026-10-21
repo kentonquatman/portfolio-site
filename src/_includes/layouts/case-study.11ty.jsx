@@ -19,7 +19,7 @@ import { Button } from "@astryxdesign/core/Button";
 import { Divider } from "@astryxdesign/core/Divider";
 import { Token } from "@astryxdesign/core/Token";
 import { Icon } from "@astryxdesign/core/Icon";
-import { ArrowRightIcon, ArrowLeftIcon } from "@heroicons/react/24/outline";
+import { ArrowRightIcon } from "@heroicons/react/24/outline";
 import {
   ProjectMedia,
   NextProject,
@@ -76,9 +76,7 @@ export default function CaseStudyLayout(data) {
     <Section paddingBlock={6}>
       <VStack gap={8}>
         <HStack hAlign="between" vAlign="center">
-          <Link href={`${pathPrefix}work/`}>
-            <Icon icon={ArrowLeftIcon} size="sm" color="inherit" /> All work
-          </Link>
+          <Link href={`${pathPrefix}work/`}>All work</Link>
           {highlight && <Token label={highlight} />}
         </HStack>
 
