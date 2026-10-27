@@ -64,6 +64,8 @@ export default function CaseStudyLayout(data) {
     role,
     timeline,
     team,
+    image,
+    imageAlt,
     content,
     pathPrefix,
     page,
@@ -98,7 +100,14 @@ export default function CaseStudyLayout(data) {
         {/* Media first, at full width: the prototype is the evidence of
             craft, so it leads — not a section halfway down the page. */}
         <VStack gap={3}>
-          <ProjectMedia slug={slug} title={title} caption={prototype} />
+          <ProjectMedia
+            slug={slug}
+            title={title}
+            caption={prototype}
+            image={image}
+            imageAlt={imageAlt}
+            pathPrefix={pathPrefix}
+          />
           {prototypeUrl ? (
             <HStack>
               <Button

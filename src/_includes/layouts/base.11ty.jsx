@@ -10,9 +10,9 @@
 //
 // The page is server-rendered to static HTML, then hydrated in the browser
 // (see src/client.jsx) so AppShell's responsive behavior — the compact
-// mobile nav bar and drawer below the md breakpoint — works. All
-// interactivity comes from stock Astryx; there is no custom client
-// JavaScript of our own.
+// mobile nav bar below the md breakpoint — works. Interactivity is stock
+// Astryx components, plus the nav theme toggle, whose only behaviour is
+// flipping html[data-theme] (see ThemeModeToggle in components.jsx).
 import { AppShell } from "@astryxdesign/core/AppShell";
 import { Layout } from "@astryxdesign/core/Layout";
 import { SiteTopNav, SiteFooter, RawHtml } from "../components.jsx";
@@ -93,6 +93,15 @@ export default function BaseLayout(data) {
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        {/* Re-apply a stored light/dark choice before first paint so a
+            dark-mode visit never flashes light. Runs before hydration;
+            the nav toggle in components.jsx takes over from here. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              "try{var t=localStorage.getItem('portfolio-site-theme');if(t==='light'||t==='dark'){document.documentElement.setAttribute('data-theme',t);}}catch(e){}",
+          }}
+        />
         <title>
           {d.title
             ? `${d.title} · ${site.name} — ${site.role}`

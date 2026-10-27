@@ -15,6 +15,13 @@ module.exports = function (eleventyConfig) {
     "node_modules/@astryxdesign/theme-neutral/dist/theme.css": "css/theme.css",
   });
 
+  // Project imagery: src/images/<slug>.png -> /images/<slug>.png.
+  // Referenced from project front matter as `image: images/<slug>.png`.
+  // The README is documentation, not a page — keep it out of template
+  // processing; the passthrough copy still ships it as-is.
+  eleventyConfig.addPassthroughCopy({ "src/images": "images" });
+  eleventyConfig.ignores.add("src/images/README.md");
+
   // URL prefix for project-pages deploys (e.g. /portfolio-site/). Always
   // ends with a slash; "/" locally.
   eleventyConfig.addGlobalData("pathPrefix", () => {

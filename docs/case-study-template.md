@@ -94,6 +94,11 @@ prototype: "[What the prototype or live product shows — the flow, the
 prototypeUrl: "[Link to the animated prototype, video, demo, or live
   product. Delete this line only while the link does not exist yet —
   the page will show a placeholder. Every published project needs one.]"
+image: "[Hero image for the 16:9 media panel, e.g. images/<slug>.png —
+  put the file in src/images/ (spec: 16:9, 2400x1350, PNG for UI).
+  Optional until you have real imagery; the coloured placeholder panel
+  shows until then.]"
+imageAlt: "[What the image shows, for screen readers. One sentence.]"
 outcome: "[What changed, for users and/or the business. One sentence.
   Include a real number if you have one — a rate, a time saved, revenue,
   adoption. Never invent a metric. ≤ 30 words]"
@@ -124,7 +129,7 @@ or changed the outcome.]
 |---|---|---|
 | Title (display-1) + highlight label | `title`, `highlight` | The project and its strength, at a glance |
 | **Problem** (display-2 headline) | `problem` | Succinct, plain-language, stated as the headline — the reference example's pattern |
-| **Prototype media** (full-width 16:9 panel + link) | `prototype`, `prototypeUrl` | Media first and large, like every example portfolio; interactive evidence of craft |
+| **Prototype media** (full-width 16:9 panel + link) | `prototype`, `prototypeUrl`, `image`, `imageAlt` | Media first and large, like every example portfolio; interactive evidence of craft. Set `image` to show real imagery instead of the placeholder panel |
 | **Outcome** (first body block) | `outcome` | The result before the supporting detail, in case they read no further |
 | **Solution** | `solution` | Brief: problem → solution is the core story |
 | Process line | `process` | Exactly one sentence, rendered as small supporting text |
@@ -167,6 +172,8 @@ whole file including front matter:
 - [ ] No section from the “do not write” list appears anywhere.
 - [ ] A working `prototypeUrl` is set — animated prototype, video, demo,
       or live product, not static mocks alone.
+- [ ] `image` is set to a real 16:9 hero image (src/images/, 2400x1350)
+      with `imageAlt` — no placeholder panels on a published page.
 - [ ] `outcome` states a result for a user or the business. Any number in
       it is real.
 - [ ] `highlight` is different from the other projects' highlights.

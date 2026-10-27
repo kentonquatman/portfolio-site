@@ -7,6 +7,7 @@
 // project features instead of a card grid, a large media panel per
 // project instead of an icon tile, and type scale + whitespace instead
 // of containers for hierarchy.
+import { useEffect, useState } from "react";
 import { HStack, VStack } from "@astryxdesign/core/Layout";
 import { TopNav, TopNavHeading, TopNavItem } from "@astryxdesign/core/TopNav";
 import { AspectRatio } from "@astryxdesign/core/AspectRatio";
@@ -18,12 +19,15 @@ import { Link } from "@astryxdesign/core/Link";
 import { Grid } from "@astryxdesign/core/Grid";
 import { Divider } from "@astryxdesign/core/Divider";
 import { Icon } from "@astryxdesign/core/Icon";
+import { IconButton } from "@astryxdesign/core/IconButton";
 import {
   DevicePhoneMobileIcon,
   ShoppingBagIcon,
   SwatchIcon,
   Squares2X2Icon,
   PlayCircleIcon,
+  SunIcon,
+  MoonIcon,
 } from "@heroicons/react/24/outline";
 
 const NAV_ITEMS = [
@@ -51,37 +55,95 @@ export function projectHref(project, pathPrefix) {
   return `${pathPrefix}${project.url.replace(/^\//, "")}`;
 }
 
+export function assetUrl(src, pathPrefix) {
+  // Absolute URLs pass through untouched; site-relative asset paths get
+  // the deploy prefix, the same way projectHref does for page URLs.
+  if (/^(https?:)?\/\//.test(src)) return src;
+  return `${pathPrefix}${src.replace(/^\//, "")}`;
+}
+
+// Light/dark switcher for the navigation. Astryx's stock neutral theme
+// resolves its colours with light-dark(), and its reset maps
+// html[data-theme="light"|"dark"] to color-scheme, so flipping that
+// attribute is the whole switch — no custom CSS, no theme object swap.
+// The choice is stored in localStorage and re-applied before first paint
+// by the inline script in the base layout, so it survives page navigation.
+// State starts at "light" to match the server render exactly, then the
+// effect syncs it to the applied theme (or the OS preference when no
+// explicit choice exists yet) after hydration — no hydration mismatch.
+const THEME_STORAGE_KEY = "portfolio-site-theme";
+
+export function ThemeModeToggle() {
+  const [mode, setMode] = useState("light");
+  useEffect(() => {
+    const applied = document.documentElement.getAttribute("data-theme");
+    if (applied === "light" || applied === "dark") {
+      setMode(applied);
+    } else if (
+      window.matchMedia("(prefers-color-scheme: dark)").matches
+    ) {
+      setMode("dark");
+    }
+  }, []);
+  const toggle = () => {
+    const next = mode === "dark" ? "light" : "dark";
+    document.documentElement.setAttribute("data-theme", next);
+    try {
+      localStorage.setItem(THEME_STORAGE_KEY, next);
+    } catch {
+      // Private browsing etc.: the switch still works for this page.
+    }
+    setMode(next);
+  };
+  const label =
+    mode === "dark" ? "Switch to light mode" : "Switch to dark mode";
+  return (
+    <IconButton
+      label={label}
+      tooltip={label}
+      variant="ghost"
+      icon={<Icon icon={mode === "dark" ? SunIcon : MoonIcon} />}
+      onClick={toggle}
+    />
+  );
+}
+
 // Top navigation rendered in the AppShell topNav slot. The nav is shallow
 // and stable (Work / About / Contact), which is the case Astryx's layout
-// guidance gives for TopNav over SideNav. AppShell turns it into a compact
-// bar with a nav toggle below the mobile breakpoint.
+// guidance gives for TopNav over SideNav. The heading sits at the far
+// left; the items live in TopNav's endContent slot, which TopNav pins to
+// the far right (marginInlineStart: auto), with the theme switcher after
+// them. One consequence of the endContent slot: below the mobile
+// breakpoint AppShell's drawer is fed from startContent, so on small
+// screens the items stay visible in the compact mobile bar instead of
+// collapsing behind a hamburger.
 export function SiteTopNav({ site, pathPrefix, pageUrl }) {
   return (
     <TopNav
       label="Main"
       heading={
-        <TopNavHeading
-          heading={site.name}
-          subheading={site.role}
-          headingHref={pathPrefix}
-        />
+        <TopNavHeading heading={site.name} headingHref={pathPrefix} />
       }
-    >
-      {NAV_ITEMS.map((item) => {
-        const href = `${pathPrefix}${item.slug}`;
-        const isSelected = item.match.some(
-          (m) => pageUrl === `/${m}` || pageUrl === `${pathPrefix}${m}`
-        );
-        return (
-          <TopNavItem
-            key={href}
-            label={item.label}
-            href={href}
-            isSelected={isSelected}
-          />
-        );
-      })}
-    </TopNav>
+      endContent={
+        <HStack gap={2} vAlign="center">
+          {NAV_ITEMS.map((item) => {
+            const href = `${pathPrefix}${item.slug}`;
+            const isSelected = item.match.some(
+              (m) => pageUrl === `/${m}` || pageUrl === `${pathPrefix}${m}`
+            );
+            return (
+              <TopNavItem
+                key={href}
+                label={item.label}
+                href={href}
+                isSelected={isSelected}
+              />
+            );
+          })}
+          <ThemeModeToggle />
+        </HStack>
+      }
+    />
   );
 }
 
@@ -89,14 +151,6 @@ export function SiteFooter({ site, year }) {
   return (
     <VStack gap={4} paddingBlock={6} paddingInline={4}>
       <Divider />
-      <VStack gap={2}>
-        <Heading level={2} type="display-3">
-          {site.name}
-        </Heading>
-        <Text color="secondary">
-          {site.role} · {site.location}
-        </Text>
-      </VStack>
       <HStack hAlign="between" vAlign="center">
         <Text type="supporting">
           © {year} {site.name}
@@ -114,12 +168,31 @@ export function SiteFooter({ site, year }) {
   );
 }
 
-// Large media panel for a project: a 16:9 stock-theme colour panel that
-// stands in for the project's hero image or prototype video. Every
-// example portfolio leads each project with a visual at this scale; the
-// panel is where the real media goes when it exists. Until then it carries
-// the project's icon, title, and a caption naming the media it replaces.
-export function ProjectMedia({ slug, title, caption }) {
+// Large media panel for a project: a 16:9 frame that shows the project's
+// hero image when one exists, and a stock-theme colour placeholder panel
+// until then. Every example portfolio leads each project with a visual at
+// this scale; the panel is where the real media goes when it exists.
+// Until then it carries the project's icon, title, and a caption naming
+// the media it replaces.
+//
+// Images: put the file in src/images/ (copied to /images/ at build) and
+// set `image: images/<slug>.png` in the project front matter, with
+// `imageAlt` describing it for screen readers. Export at 16:9 —
+// 2400x1350 is 2x the 1200px content width. The frame's fit="cover"
+// crops off-ratio sources instead of distorting them; no custom CSS.
+export function ProjectMedia({ slug, title, caption, image, imageAlt, pathPrefix }) {
+  if (image) {
+    return (
+      <AspectRatio ratio={16 / 9} fit="cover">
+        <img
+          src={assetUrl(image, pathPrefix)}
+          alt={imageAlt || title}
+          width="100%"
+          height="100%"
+        />
+      </AspectRatio>
+    );
+  }
   const visual = PROJECT_VISUALS[slug] || {
     icon: Squares2X2Icon,
     variant: "gray",
@@ -145,8 +218,17 @@ export function ProjectMedia({ slug, title, caption }) {
 // the link. No card, no tile grid: this is the Aaron James / Laura Javier
 // pattern of one large feature per project in a single scroll.
 export function ProjectFeature({ project, pathPrefix }) {
-  const { title, highlight, problem, outcome, prototype, role, timeline } =
-    project.data;
+  const {
+    title,
+    highlight,
+    problem,
+    outcome,
+    prototype,
+    role,
+    timeline,
+    image,
+    imageAlt,
+  } = project.data;
   const href = projectHref(project, pathPrefix);
   const slug = projectSlug(project);
   return (
@@ -155,7 +237,14 @@ export function ProjectFeature({ project, pathPrefix }) {
           shrink-to-fit parent (its documented behaviour), which is what
           hid the panel in the first visual check. The title and the
           "View case study" link below carry navigation instead. */}
-      <ProjectMedia slug={slug} title={title} caption={prototype} />
+      <ProjectMedia
+        slug={slug}
+        title={title}
+        caption={prototype}
+        image={image}
+        imageAlt={imageAlt}
+        pathPrefix={pathPrefix}
+      />
       <Grid columns={{ minWidth: 320, repeat: "fit" }} gap={6}>
         <VStack gap={3}>
           {highlight && <Token label={highlight} />}
