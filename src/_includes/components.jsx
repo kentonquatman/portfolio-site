@@ -12,11 +12,9 @@ import { HStack, VStack } from "@astryxdesign/core/Layout";
 import { TopNav, TopNavHeading, TopNavItem } from "@astryxdesign/core/TopNav";
 import { AspectRatio } from "@astryxdesign/core/AspectRatio";
 import { Card } from "@astryxdesign/core/Card";
-import { Token } from "@astryxdesign/core/Token";
 import { Heading } from "@astryxdesign/core/Heading";
 import { Text } from "@astryxdesign/core/Text";
 import { Link } from "@astryxdesign/core/Link";
-import { Grid } from "@astryxdesign/core/Grid";
 import { Divider } from "@astryxdesign/core/Divider";
 import { Icon } from "@astryxdesign/core/Icon";
 import { IconButton } from "@astryxdesign/core/IconButton";
@@ -253,7 +251,15 @@ export function IdentityRail({ site, pathPrefix, compact = false, sticky = false
 // `imageAlt` describing it for screen readers. Export at 16:9 —
 // 2400x1350 is 2x the 1200px content width. The frame's fit="cover"
 // crops off-ratio sources instead of distorting them; no custom CSS.
-export function ProjectMedia({ slug, title, caption, image, imageAlt, pathPrefix }) {
+export function ProjectMedia({
+  slug,
+  title,
+  caption,
+  image,
+  imageAlt,
+  pathPrefix,
+  wordless = false,
+}) {
   if (image) {
     return (
       <AspectRatio ratio={16 / 9} fit="cover">
@@ -274,70 +280,81 @@ export function ProjectMedia({ slug, title, caption, image, imageAlt, pathPrefix
   return (
     <AspectRatio ratio={16 / 9}>
       <Card variant={visual.variant} width="100%" height="100%" padding={8}>
-        <VStack gap={4}>
-          <Icon icon={VisualIcon} size="lg" color="inherit" />
-          <Heading level={3} type="display-3" textWrap="balance">
-            {title}
-          </Heading>
-          <Text color="secondary">{caption}</Text>
-        </VStack>
+        {wordless ? (
+          // Wordless panel for work cards: the icon alone, centred, so
+          // the title appears only once — as the heading below the
+          // panel. The titled panel below is kept for case-study pages,
+          // where the panel is the prototype media itself.
+          <VStack height="100%" hAlign="center" vAlign="center">
+            <Icon icon={VisualIcon} size="lg" color="inherit" />
+          </VStack>
+        ) : (
+          <VStack gap={4}>
+            <Icon icon={VisualIcon} size="lg" color="inherit" />
+            <Heading level={3} type="display-3" textWrap="balance">
+              {title}
+            </Heading>
+            <Text color="secondary">{caption}</Text>
+          </VStack>
+        )}
       </Card>
     </AspectRatio>
   );
 }
 
 // One project, full width — the unit the Home and Work pages are built
-// from. Media first, then the problem and the outcome side by side, then
-// the link. No card, no tile grid: this is the Aaron James / Laura Javier
-// pattern of one large feature per project in a single scroll.
+// from, redesigned 2026-10-27 from the work-card research (stack
+// version, chosen by Kenton): image-only panel, then a single column
+// — title once as the link, one muted discipline line, one
+// description sentence, and "View case study →" directly underneath.
+// No second text column, no tag + role + date stack, no problem or
+// outcome paragraphs on the card: role, timeline, problem, and outcome
+// live on the case-study page itself. No tile grid: this is the
+// full-width stack the best 3-project portfolios use on home and work.
 export function ProjectFeature({ project, pathPrefix }) {
-  const {
-    title,
-    highlight,
-    problem,
-    outcome,
-    prototype,
-    role,
-    timeline,
-    image,
-    imageAlt,
-  } = project.data;
+  const { title, highlight, solution, image, imageAlt } = project.data;
   const href = projectHref(project, pathPrefix);
   const slug = projectSlug(project);
+  // The description is the existing solution sentence, with its
+  // "Placeholder solution:" label stripped and the first letter
+  // capitalised so the card reads as a sentence, not a placeholder
+  // note. No new claims are added; when the solution is replaced
+  // with real text, keep it to one sentence.
+  const rawDescription = (solution || "").replace(
+    /^Placeholder solution:\s*/,
+    "",
+  );
+  const description = rawDescription
+    ? rawDescription.charAt(0).toUpperCase() + rawDescription.slice(1)
+    : "";
   return (
-    <VStack gap={5}>
+    <VStack gap={4}>
       {/* Not wrapped in a Link: AspectRatio collapses inside a
           shrink-to-fit parent (its documented behaviour), which is what
-          hid the panel in the first visual check. The title and the
-          "View case study" link below carry navigation instead. */}
+          hid the panel in the first visual check. The title link and
+          the "View case study →" link below carry navigation instead. */}
       <ProjectMedia
         slug={slug}
         title={title}
-        caption={prototype}
         image={image}
         imageAlt={imageAlt}
         pathPrefix={pathPrefix}
+        wordless
       />
-      <Grid columns={{ minWidth: 320, repeat: "fit" }} gap={6}>
-        <VStack gap={3}>
-          {highlight && <Token label={highlight} />}
-          <Heading level={3} type="display-3" textWrap="balance">
-            <Link href={href} color="inherit">
-              {title}
-            </Link>
-          </Heading>
+      <VStack gap={2}>
+        <Heading level={3} type="display-3" textWrap="balance">
+          <Link href={href} color="inherit">
+            {title}
+          </Link>
+        </Heading>
+        {highlight && (
           <Text type="supporting" color="secondary">
-            {role} · {timeline}
+            {highlight}
           </Text>
-        </VStack>
-        <VStack gap={3}>
-          <Text type="large">{problem}</Text>
-          {outcome && <Text color="secondary">Outcome: {outcome}</Text>}
-          <HStack>
-            <Link href={href}>View case study</Link>
-          </HStack>
-        </VStack>
-      </Grid>
+        )}
+      </VStack>
+      {description && <Text color="secondary">{description}</Text>}
+      <Link href={href}>View case study →</Link>
     </VStack>
   );
 }

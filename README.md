@@ -46,7 +46,11 @@ Set `ELEVENTY_PATH_PREFIX=/repo-name/` when deploying to a project subpath
 - **Shared components** (top navigation, footer, project media panel and
   full-width project feature): `src/_includes/components.jsx`. The frame is
   a TopNav over a wide (1200) content column; projects are presented as
-  large full-width features with a 16:9 media panel, not a card grid.
+  large full-width features with a wordless 16:9 media panel, then title
+  once as the link, one discipline line, one description sentence, and
+  "View case study →" — not a card grid, and with no title in the panel,
+  no second text column, and no role/timeline/problem/outcome on the card
+  (those live on the case-study page).
 - **Layouts**: `src/_includes/layouts/base.11ty.jsx`,
   `src/_includes/layouts/case-study.11ty.jsx`
 - **Case studies**: add Markdown files in `src/projects/`, following
