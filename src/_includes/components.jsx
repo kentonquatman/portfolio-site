@@ -169,28 +169,23 @@ export function SiteFooter({ site, year }) {
 }
 
 // Identity rail for the About page (layout A, chosen 2026-10-27): the
-// headshot, name, role, location, contact links, and in-page anchor nav.
-// Rendered by the base layout, not by the About page itself, because the
-// rail is a page-frame panel (see base.11ty.jsx): on desktop it sits in
-// a Layout start panel and sticks below the measured TopNav height —
+// headshot, name, role, location, and contact links — contact lives
+// here, not in a separate section below the resume. Rendered by the
+// base layout, not by the About page itself, because the rail is a
+// page-frame panel (see base.11ty.jsx): on desktop it sits in a Layout
+// end panel on the right and sticks below the measured TopNav height —
 // Astryx's own header-height variable, the same one its sticky sideNav
-// uses — and on narrow viewports the base layout stacks it above the
-// main column instead, where it is not sticky. Headshot: set
-// site.headshot in src/_data/site.js; until then a placeholder panel
-// shows, cropped to the rail's 4:5 portrait frame like a real photo.
-const RAIL_NAV = [
-  { label: "Bio", href: "#bio" },
-  { label: "Experience", href: "#experience" },
-  { label: "Education", href: "#education" },
-  { label: "Skills", href: "#skills" },
-  { label: "Contact", href: "#contact" },
-];
+// uses — with no divider between it and the main column. On narrow
+// viewports the base layout stacks it above the main column instead,
+// where it is not sticky. Headshot: site.headshot in src/_data/site.js
+// points at a placeholder image until a real photo replaces it.
+
 
 export function IdentityRail({ site, pathPrefix, compact = false, sticky = false }) {
   const content = (
     <VStack gap={4}>
       <VStack width={compact ? 240 : "100%"}>
-        <AspectRatio ratio={4 / 5} fit="cover">
+        <AspectRatio ratio={1} fit="cover">
           {site.headshot ? (
             <img
               src={assetUrl(site.headshot, pathPrefix)}
@@ -228,28 +223,6 @@ export function IdentityRail({ site, pathPrefix, compact = false, sticky = false
             {link.label}
           </Link>
         ))}
-      </VStack>
-      <VStack gap={2}>
-        <Text type="supporting" color="secondary">
-          ON THIS PAGE
-        </Text>
-        {compact ? (
-          <HStack gap={4} wrap="wrap" vAlign="center">
-            {RAIL_NAV.map((item) => (
-              <Link key={item.href} href={item.href}>
-                {item.label}
-              </Link>
-            ))}
-          </HStack>
-        ) : (
-          <VStack gap={2}>
-            {RAIL_NAV.map((item) => (
-              <Link key={item.href} href={item.href}>
-                {item.label}
-              </Link>
-            ))}
-          </VStack>
-        )}
       </VStack>
     </VStack>
   );

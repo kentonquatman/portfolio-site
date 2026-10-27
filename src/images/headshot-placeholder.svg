@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="800" viewBox="0 0 800 800" role="img" aria-label="Headshot placeholder">
+  <title>Headshot placeholder</title>
+  <rect width="800" height="800" fill="#d9d9d9"/>
+  <circle cx="400" cy="300" r="130" fill="#8a8a8a"/>
+  <ellipse cx="400" cy="680" rx="260" ry="180" fill="#8a8a8a"/>
+</svg>

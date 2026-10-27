@@ -15,8 +15,9 @@
 // flipping html[data-theme] (see ThemeModeToggle in components.jsx).
 //
 // About is the one page with a page-frame panel: its identity rail
-// (layout A) lives here, in the Layout start slot, because a page's own
-// content is rendered to a static string and cannot own a frame slot.
+// (layout A) lives here, in the Layout end slot on the right, because
+// a page's own content is rendered to a static string and cannot own a
+// frame slot. There is no divider between the rail and the main column.
 // Below 900px the rail is not a panel at all — it stacks above the main
 // column, unstuck — which is the mobile behaviour the research called
 // for. The breakpoint hook runs on every page so hook order stays
@@ -100,9 +101,9 @@ export function PageBody(data) {
       <Layout
         contentWidth={1200}
         footer={<SiteFooter site={d.site} year={d.year} />}
-        start={
+        end={
           isRailPage && !isNarrow ? (
-            <LayoutPanel width={360} hasDivider isScrollable={false}>
+            <LayoutPanel width={360} isScrollable={false}>
               {rail}
             </LayoutPanel>
           ) : undefined
