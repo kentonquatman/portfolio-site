@@ -28,6 +28,7 @@ import {
   PlayCircleIcon,
   SunIcon,
   MoonIcon,
+  UserCircleIcon,
 } from "@heroicons/react/24/outline";
 
 const NAV_ITEMS = [
@@ -163,6 +164,106 @@ export function SiteFooter({ site, year }) {
           ))}
         </HStack>
       </HStack>
+    </VStack>
+  );
+}
+
+// Identity rail for the About page (layout A, chosen 2026-10-27): the
+// headshot, name, role, location, contact links, and in-page anchor nav.
+// Rendered by the base layout, not by the About page itself, because the
+// rail is a page-frame panel (see base.11ty.jsx): on desktop it sits in
+// a Layout start panel and sticks below the measured TopNav height —
+// Astryx's own header-height variable, the same one its sticky sideNav
+// uses — and on narrow viewports the base layout stacks it above the
+// main column instead, where it is not sticky. Headshot: set
+// site.headshot in src/_data/site.js; until then a placeholder panel
+// shows, cropped to the rail's 4:5 portrait frame like a real photo.
+const RAIL_NAV = [
+  { label: "Bio", href: "#bio" },
+  { label: "Experience", href: "#experience" },
+  { label: "Education", href: "#education" },
+  { label: "Skills", href: "#skills" },
+  { label: "Contact", href: "#contact" },
+];
+
+export function IdentityRail({ site, pathPrefix, compact = false, sticky = false }) {
+  const content = (
+    <VStack gap={4}>
+      <VStack width={compact ? 240 : "100%"}>
+        <AspectRatio ratio={4 / 5} fit="cover">
+          {site.headshot ? (
+            <img
+              src={assetUrl(site.headshot, pathPrefix)}
+              alt={`Headshot of ${site.name}`}
+              width="100%"
+              height="100%"
+            />
+          ) : (
+            <Card variant="gray" width="100%" height="100%" padding={8}>
+              <VStack gap={3}>
+                <Icon icon={UserCircleIcon} size="lg" color="inherit" />
+                <Text color="secondary">Headshot</Text>
+                <Text type="supporting" color="secondary">
+                  Drop a portrait in src/images/ and set site.headshot in
+                  src/_data/site.js.
+                </Text>
+              </VStack>
+            </Card>
+          )}
+        </AspectRatio>
+      </VStack>
+      <VStack gap={2}>
+        <Heading level={1} type="display-2" textWrap="balance">
+          {site.name}
+        </Heading>
+        <Text type="large" color="secondary">
+          {site.role}
+        </Text>
+        <Text color="secondary">{site.location}</Text>
+      </VStack>
+      <VStack gap={2}>
+        <Link href={`mailto:${site.email}`}>{site.email}</Link>
+        {site.social.map((link) => (
+          <Link key={link.url} href={link.url} target="_blank" rel="noopener">
+            {link.label}
+          </Link>
+        ))}
+      </VStack>
+      <VStack gap={2}>
+        <Text type="supporting" color="secondary">
+          ON THIS PAGE
+        </Text>
+        {compact ? (
+          <HStack gap={4} wrap="wrap" vAlign="center">
+            {RAIL_NAV.map((item) => (
+              <Link key={item.href} href={item.href}>
+                {item.label}
+              </Link>
+            ))}
+          </HStack>
+        ) : (
+          <VStack gap={2}>
+            {RAIL_NAV.map((item) => (
+              <Link key={item.href} href={item.href}>
+                {item.label}
+              </Link>
+            ))}
+          </VStack>
+        )}
+      </VStack>
+    </VStack>
+  );
+  if (!sticky) {
+    return content;
+  }
+  return (
+    <VStack
+      style={{
+        position: "sticky",
+        top: "var(--_app-shell-header-height, 0px)",
+      }}
+    >
+      {content}
     </VStack>
   );
 }

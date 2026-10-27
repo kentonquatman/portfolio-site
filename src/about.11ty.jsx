@@ -2,40 +2,33 @@
 layout: layouts/base.11ty.jsx
 title: About
 ---
-// About page, redesigned 2026-10-27 as a resume first: a short header
-// (headshot + bio + contact summary), then the resume itself —
-// Experience, Education, Skills — and a closing Contact section that
-// carries everything the old Contact page held, so that page could be
-// deleted. Default Astryx styling only — no custom CSS.
+// About page, redesigned 2026-10-27 as layout A (chosen from the three
+// preview directions): a sticky identity rail on desktop — headshot,
+// name, role, location, contact links, and in-page nav — beside a
+// scrolling main column, collapsing to a single stacked column on
+// narrow viewports. The rail itself lives in the base layout (see
+// IdentityRail in components.jsx); this file is only the main column:
+// Bio → Experience → Education → Skills → Contact, with contact
+// repeated here at the end so the page never needs a Contact page.
+// Default Astryx styling only — no custom CSS.
 //
 // Everything resume-shaped below is placeholder, in the same spirit as
 // the rest of the site: replace the entries, do not keep the invented
-// companies, dates, or credentials. One row per role or qualification:
-// title, organisation, dates, and one line on what it was about.
-//
-// Headshot: drop a square photo in src/images/ (copied to /images/ at
-// build, like project imagery) and set HEADSHOT below, e.g.
-// "images/headshot.jpg". Until then the placeholder panel shows.
+// companies, dates, or credentials.
 import { Section, VStack, HStack } from "@astryxdesign/core/Layout";
-import { Grid } from "@astryxdesign/core/Grid";
 import { Heading } from "@astryxdesign/core/Heading";
 import { Text } from "@astryxdesign/core/Text";
 import { Token } from "@astryxdesign/core/Token";
 import { Link } from "@astryxdesign/core/Link";
 import { Divider } from "@astryxdesign/core/Divider";
-import { Card } from "@astryxdesign/core/Card";
-import { AspectRatio } from "@astryxdesign/core/AspectRatio";
-import { Icon } from "@astryxdesign/core/Icon";
 import { Button } from "@astryxdesign/core/Button";
-import { UserCircleIcon, EnvelopeIcon } from "@heroicons/react/24/outline";
-import { assetUrl } from "./_includes/components.jsx";
-
-const HEADSHOT = null;
-const HEADSHOT_ALT = "Headshot";
+import { Icon } from "@astryxdesign/core/Icon";
+import { EnvelopeIcon } from "@heroicons/react/24/outline";
 
 const BIO = [
   "Placeholder: a short bio goes here — your background, what drew you to design, and the kinds of problems you love solving.",
   "Placeholder: a second short paragraph on how you like to work — for example, with whom, on what kinds of teams, and what a good project looks like to you.",
+  "Placeholder: I'm currently open to new opportunities and freelance projects.",
 ];
 
 const EXPERIENCE = [
@@ -101,57 +94,31 @@ const SKILL_AREAS = [
 
 const SUPPORTING_SKILLS = ["Prototyping & Motion", "Design Systems"];
 
-// Headshot: the real photo when HEADSHOT is set, otherwise a stock-theme
-// placeholder panel naming the photo it replaces — the same pattern as
-// the project media panels.
-function Headshot({ name, pathPrefix }) {
-  if (HEADSHOT) {
-    return (
-      <AspectRatio ratio={1} fit="cover">
-        <img
-          src={assetUrl(HEADSHOT, pathPrefix)}
-          alt={HEADSHOT_ALT || name}
-          width="100%"
-          height="100%"
-        />
-      </AspectRatio>
-    );
-  }
-  return (
-    <AspectRatio ratio={1}>
-      <Card variant="gray" width="100%" height="100%" padding={8}>
-        <VStack gap={3}>
-          <Icon icon={UserCircleIcon} size="lg" color="inherit" />
-          <Text color="secondary">Headshot</Text>
-          <Text type="supporting" color="secondary">
-            Drop a square photo in src/images/ and set HEADSHOT above.
-          </Text>
-        </VStack>
-      </Card>
-    </AspectRatio>
-  );
-}
-
-// One resume row: title and dates on one line, organisation below, then
-// a single summary line. Rows, not cards — dense data stays as rows.
+// One resume row: the date in its own narrow sub-column, then role,
+// organisation, and a single summary line. The row wraps, so on a
+// narrow main column the date moves above the role instead of
+// squeezing the text beside it. Rows, not cards — dense data stays
+// as rows.
 function ResumeEntry({ entry }) {
   return (
-    <VStack gap={1}>
-      <HStack hAlign="between" vAlign="center" wrap="wrap">
-        <Heading level={3}>{entry.title}</Heading>
+    <HStack gap={4} wrap="wrap" vAlign="start">
+      <VStack width={140}>
         <Text type="supporting" color="secondary">
           {entry.dates}
         </Text>
-      </HStack>
-      <Text color="secondary">{entry.org}</Text>
-      <Text>{entry.detail}</Text>
-    </VStack>
+      </VStack>
+      <VStack gap={1}>
+        <Heading level={3}>{entry.title}</Heading>
+        <Text color="secondary">{entry.org}</Text>
+        <Text>{entry.detail}</Text>
+      </VStack>
+    </HStack>
   );
 }
 
-function ResumeSection({ title, entries }) {
+function ResumeSection({ id, title, entries }) {
   return (
-    <Section>
+    <Section id={id}>
       <VStack gap={4}>
         <Heading level={2}>{title}</Heading>
         <Divider />
@@ -167,59 +134,35 @@ function ResumeSection({ title, entries }) {
 }
 
 export default function About(data) {
-  const { site, pathPrefix } = data;
+  const { site } = data;
   return (
     <>
-      {/* Resume header: headshot beside the name, role, location, bio,
-          and a compact contact line — the contact summary a resume
-          header carries. The full contact section is at the end. */}
-      <Section paddingBlock={10}>
-        <Grid columns={{ minWidth: 280, repeat: "fit" }} gap={8}>
-          <Headshot name={site.name} pathPrefix={pathPrefix} />
-          <VStack gap={4}>
-            <VStack gap={2}>
-              <Text type="supporting" color="secondary">
-                About · Resume
-              </Text>
-              <Heading level={1} type="display-1" textWrap="balance">
-                {site.name}
-              </Heading>
-              <Text type="large" color="secondary">
-                {site.role} · {site.location}
-              </Text>
-            </VStack>
-            {BIO.map((paragraph) => (
-              <Text key={paragraph} type="large" color="secondary" textWrap="balance">
-                {paragraph}
-              </Text>
-            ))}
-            <HStack gap={4} wrap="wrap" vAlign="center">
-              <Link href={`mailto:${site.email}`}>{site.email}</Link>
-              {site.social.map((link) => (
-                <Link key={link.url} href={link.url} target="_blank" rel="noopener">
-                  {link.label}
-                </Link>
-              ))}
-            </HStack>
-          </VStack>
-        </Grid>
+      <Section id="bio">
+        <VStack gap={4}>
+          <Text type="supporting" color="secondary">
+            BIO
+          </Text>
+          {BIO.map((paragraph) => (
+            <Text key={paragraph} type="large" color="secondary" textWrap="balance">
+              {paragraph}
+            </Text>
+          ))}
+        </VStack>
       </Section>
 
-      <ResumeSection title="Experience" entries={EXPERIENCE} />
-      <ResumeSection title="Education" entries={EDUCATION} />
+      <ResumeSection id="experience" title="Experience" entries={EXPERIENCE} />
+      <ResumeSection id="education" title="Education" entries={EDUCATION} />
 
-      <Section>
+      <Section id="skills">
         <VStack gap={4}>
           <Heading level={2}>Skills</Heading>
           <Divider />
-          <Grid columns={{ minWidth: 280, repeat: "fit" }} gap={6}>
-            {SKILL_AREAS.map((area) => (
-              <VStack key={area.name} gap={2}>
-                <Heading level={3}>{area.name}</Heading>
-                <Text color="secondary">{area.description}</Text>
-              </VStack>
-            ))}
-          </Grid>
+          {SKILL_AREAS.map((area) => (
+            <VStack key={area.name} gap={2}>
+              <Heading level={3}>{area.name}</Heading>
+              <Text color="secondary">{area.description}</Text>
+            </VStack>
+          ))}
           <HStack gap={2} wrap="wrap" vAlign="center">
             <Text type="supporting" color="secondary">
               Also:
@@ -232,8 +175,9 @@ export default function About(data) {
       </Section>
 
       {/* Contact, moved here from the deleted Contact page: the same
-          statement, email action, and social list, unchanged. */}
-      <Section>
+          statement, email action, and social list, unchanged — the
+          closing strip that makes this page complete on its own. */}
+      <Section id="contact">
         <VStack gap={6}>
           <VStack gap={4}>
             <Heading level={2} type="display-3" textWrap="balance">

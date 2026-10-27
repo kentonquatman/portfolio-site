@@ -13,9 +13,23 @@
 // mobile nav bar below the md breakpoint — works. Interactivity is stock
 // Astryx components, plus the nav theme toggle, whose only behaviour is
 // flipping html[data-theme] (see ThemeModeToggle in components.jsx).
+//
+// About is the one page with a page-frame panel: its identity rail
+// (layout A) lives here, in the Layout start slot, because a page's own
+// content is rendered to a static string and cannot own a frame slot.
+// Below 900px the rail is not a panel at all — it stacks above the main
+// column, unstuck — which is the mobile behaviour the research called
+// for. The breakpoint hook runs on every page so hook order stays
+// stable; it is the same SSR-safe hook AppShell uses.
 import { AppShell } from "@astryxdesign/core/AppShell";
-import { Layout } from "@astryxdesign/core/Layout";
-import { SiteTopNav, SiteFooter, RawHtml } from "../components.jsx";
+import { Layout, LayoutPanel, VStack } from "@astryxdesign/core/Layout";
+import { useMediaQuery } from "@astryxdesign/core/hooks";
+import {
+  SiteTopNav,
+  SiteFooter,
+  RawHtml,
+  IdentityRail,
+} from "../components.jsx";
 
 // The fields the client needs to re-render the identical tree during
 // hydration. Collection items are sanitized because 11ty's full objects are
@@ -61,6 +75,16 @@ function pageData(data) {
 // the viewport breakpoint and manage the mobile drawer.
 export function PageBody(data) {
   const d = pageData(data);
+  const isNarrow = useMediaQuery("(width < 900px)");
+  const isRailPage = d.page.url === "/about/";
+  const rail = isRailPage ? (
+    <IdentityRail
+      site={d.site}
+      pathPrefix={d.pathPrefix}
+      compact={isNarrow}
+      sticky={!isNarrow}
+    />
+  ) : null;
   return (
     <AppShell
       height="auto"
@@ -76,8 +100,22 @@ export function PageBody(data) {
       <Layout
         contentWidth={1200}
         footer={<SiteFooter site={d.site} year={d.year} />}
+        start={
+          isRailPage && !isNarrow ? (
+            <LayoutPanel width={360} hasDivider isScrollable={false}>
+              {rail}
+            </LayoutPanel>
+          ) : undefined
+        }
       >
-        <RawHtml html={d.content} />
+        {isRailPage && isNarrow ? (
+          <VStack gap={8}>
+            {rail}
+            <RawHtml html={d.content} />
+          </VStack>
+        ) : (
+          <RawHtml html={d.content} />
+        )}
       </Layout>
     </AppShell>
   );
