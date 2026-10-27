@@ -39,7 +39,8 @@ Set `ELEVENTY_PATH_PREFIX=/repo-name/` when deploying to a project subpath
   `src/about.11ty.jsx` (a resume in layout A: a sticky identity rail on
   the right — headshot, name, role, location, contact links, no
   divider between rail and body — beside a scrolling main column of
-  Bio, Experience, and Education; on narrow viewports the rail stacks
+  Bio, Experience, and Education, with generous spacing between
+  sections and entries; on narrow viewports the rail stacks
   above the main column. Contact lives in the rail, and there is no
   Skills section and no separate Contact page)
 - **Shared components** (top navigation, footer, project media panel and

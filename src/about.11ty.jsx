@@ -74,6 +74,14 @@ const ANCHOR_STYLE = {
     "calc(var(--_app-shell-header-height, 0px) + var(--spacing-4))",
 };
 
+// Spacing, 2026-10-27: the previous layout packed sections together —
+// sections carried only the theme's 12px padding and no gap between
+// them, so the whole page fit one viewport. The values below are
+// deliberately generous, in Astryx spacing steps (4 = 16px, 6 = 24px,
+// 8 = 32px, 10 = 40px): sections get 24px of their own padding plus
+// 32px between them, about 80px of breathing room between section
+// contents, and entries get room to read as separate rows.
+//
 // One resume row: the date in its own narrow sub-column, then role,
 // organisation, and a single summary line. The row wraps, so on a
 // narrow main column the date moves above the role instead of
@@ -81,13 +89,13 @@ const ANCHOR_STYLE = {
 // as rows.
 function ResumeEntry({ entry }) {
   return (
-    <HStack gap={4} wrap="wrap" vAlign="start">
+    <HStack gap={6} wrap="wrap" vAlign="start">
       <VStack width={140}>
         <Text type="supporting" color="secondary">
           {entry.dates}
         </Text>
       </VStack>
-      <VStack gap={1}>
+      <VStack gap={2}>
         <Heading level={3}>{entry.title}</Heading>
         <Text color="secondary">{entry.org}</Text>
         <Text>{entry.detail}</Text>
@@ -98,12 +106,12 @@ function ResumeEntry({ entry }) {
 
 function ResumeSection({ id, title, entries }) {
   return (
-    <Section id={id} style={ANCHOR_STYLE}>
-      <VStack gap={4}>
+    <Section id={id} style={ANCHOR_STYLE} padding={6}>
+      <VStack gap={8}>
         <Heading level={2}>{title}</Heading>
         <Divider />
         {entries.map((entry, i) => (
-          <VStack key={`${entry.title}-${i}`} gap={4}>
+          <VStack key={`${entry.title}-${i}`} gap={6}>
             {i > 0 && <Divider />}
             <ResumeEntry entry={entry} />
           </VStack>
@@ -115,9 +123,9 @@ function ResumeSection({ id, title, entries }) {
 
 export default function About() {
   return (
-    <>
-      <Section id="bio" style={ANCHOR_STYLE}>
-        <VStack gap={4}>
+    <VStack gap={8}>
+      <Section id="bio" style={ANCHOR_STYLE} padding={6}>
+        <VStack gap={6}>
           <Text type="supporting" color="secondary">
             BIO
           </Text>
@@ -131,6 +139,6 @@ export default function About() {
 
       <ResumeSection id="experience" title="Experience" entries={EXPERIENCE} />
       <ResumeSection id="education" title="Education" entries={EDUCATION} />
-    </>
+    </VStack>
   );
 }

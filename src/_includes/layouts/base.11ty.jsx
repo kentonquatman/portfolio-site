@@ -103,14 +103,14 @@ export function PageBody(data) {
         footer={<SiteFooter site={d.site} year={d.year} />}
         end={
           isRailPage && !isNarrow ? (
-            <LayoutPanel width={360} isScrollable={false}>
+            <LayoutPanel width={360} padding={6} isScrollable={false}>
               {rail}
             </LayoutPanel>
           ) : undefined
         }
       >
         {isRailPage && isNarrow ? (
-          <VStack gap={8}>
+          <VStack gap={10}>
             {rail}
             <RawHtml html={d.content} />
           </VStack>

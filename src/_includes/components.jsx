@@ -183,7 +183,7 @@ export function SiteFooter({ site, year }) {
 
 export function IdentityRail({ site, pathPrefix, compact = false, sticky = false }) {
   const content = (
-    <VStack gap={4}>
+    <VStack gap={8}>
       <VStack width={compact ? 240 : "100%"}>
         <AspectRatio ratio={1} fit="cover">
           {site.headshot ? (
@@ -207,7 +207,7 @@ export function IdentityRail({ site, pathPrefix, compact = false, sticky = false
           )}
         </AspectRatio>
       </VStack>
-      <VStack gap={2}>
+      <VStack gap={4}>
         <Heading level={1} type="display-2" textWrap="balance">
           {site.name}
         </Heading>
@@ -216,7 +216,7 @@ export function IdentityRail({ site, pathPrefix, compact = false, sticky = false
         </Text>
         <Text color="secondary">{site.location}</Text>
       </VStack>
-      <VStack gap={2}>
+      <VStack gap={4}>
         <Link href={`mailto:${site.email}`}>{site.email}</Link>
         {site.social.map((link) => (
           <Link key={link.url} href={link.url} target="_blank" rel="noopener">
