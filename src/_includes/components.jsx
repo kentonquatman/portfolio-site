@@ -33,7 +33,6 @@ import {
 const NAV_ITEMS = [
   { label: "Work", slug: "work/", match: ["work/", "projects/"] },
   { label: "About", slug: "about/", match: ["about/"] },
-  { label: "Contact", slug: "contact/", match: ["contact/"] },
 ];
 
 // Visual identity per project, keyed by the project file slug: an icon
@@ -109,7 +108,7 @@ export function ThemeModeToggle() {
 }
 
 // Top navigation rendered in the AppShell topNav slot. The nav is shallow
-// and stable (Work / About / Contact), which is the case Astryx's layout
+// and stable (Work / About), which is the case Astryx's layout
 // guidance gives for TopNav over SideNav. The heading sits at the far
 // left; the items live in TopNav's endContent slot, which TopNav pins to
 // the far right (marginInlineStart: auto), with the theme switcher after

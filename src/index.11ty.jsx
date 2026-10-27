@@ -73,11 +73,6 @@ export default function Home(data) {
               label="More about me"
               href={`${pathPrefix}about/`}
             />
-            <Button
-              variant="primary"
-              label="Get in touch"
-              href={`${pathPrefix}contact/`}
-            />
           </HStack>
         </VStack>
       </Section>

@@ -33,7 +33,9 @@ Set `ELEVENTY_PATH_PREFIX=/repo-name/` when deploying to a project subpath
 
 - **Site details** (name, role, email, social links): edit `src/_data/site.js`
 - **Pages**: `src/index.11ty.jsx`, `src/work.11ty.jsx`,
-  `src/about.11ty.jsx`, `src/contact.11ty.jsx`
+  `src/about.11ty.jsx` (a resume — headshot and bio, then Experience,
+  Education, Skills — with the contact information at the end; there is
+  no separate Contact page)
 - **Shared components** (top navigation, footer, project media panel and
   full-width project feature): `src/_includes/components.jsx`. The frame is
   a TopNav over a wide (1200) content column; projects are presented as

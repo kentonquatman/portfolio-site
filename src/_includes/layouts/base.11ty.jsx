@@ -2,7 +2,7 @@
 // Layout constrains the content column and footer. Default Astryx styling
 // only — no custom CSS.
 //
-// Navigation is a shallow, stable TopNav (Work / About / Contact), not a
+// Navigation is a shallow, stable TopNav (Work / About), not a
 // sidebar: the frame the example portfolios use, and the case Astryx's
 // layout guidance gives for TopNav. The content column is wide (1200) so
 // project media can run at the scale those examples use; prose sections
