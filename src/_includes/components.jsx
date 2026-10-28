@@ -305,12 +305,30 @@ export function ProjectMedia({
 // One project, full width — the unit the Home and Work pages are built
 // from, redesigned 2026-10-27 from the work-card research (stack
 // version, chosen by Kenton): image-only panel, then a single column
-// — title once as the link, one muted discipline line, one
+// — title once as a heading, one muted discipline line, one
 // description sentence, and "View case study →" directly underneath.
 // No second text column, no tag + role + date stack, no problem or
 // outcome paragraphs on the card: role, timeline, problem, and outcome
 // live on the case-study page itself. No tile grid: this is the
 // full-width stack the best 3-project portfolios use on home and work.
+//
+// The whole card is one link. That has two consequences, both
+// deliberate:
+// - The title is a plain heading, not a link inside the card link:
+//   nested links are invalid HTML and browsers split the outer link
+//   around them. The heading keeps its h3 semantics inside the card
+//   link, and "View case study →" is accent-coloured text, not a
+//   second link, for the same reason.
+// - The link is block-level (display="block" on the link and its text
+//   wrapper). AspectRatio collapses inside a shrink-to-fit parent —
+//   the bug that hid the panel in the first visual check — and an
+//   inline link is shrink-to-fit; a block link fills the column, so
+//   the panel keeps its full-width 16:9 size. This is structural
+//   sizing, the same kind of inline style the sticky rail uses, not
+//   visual styling: all colours and type still come from Astryx.
+// Text spacing is generous on purpose (24px between blocks, 16px
+// between title and discipline line), after the previous 16px/8px
+// stack read as cramped against the large panels.
 export function ProjectFeature({ project, pathPrefix }) {
   const { title, highlight, solution, image, imageAlt } = project.data;
   const href = projectHref(project, pathPrefix);
@@ -328,34 +346,36 @@ export function ProjectFeature({ project, pathPrefix }) {
     ? rawDescription.charAt(0).toUpperCase() + rawDescription.slice(1)
     : "";
   return (
-    <VStack gap={4}>
-      {/* Not wrapped in a Link: AspectRatio collapses inside a
-          shrink-to-fit parent (its documented behaviour), which is what
-          hid the panel in the first visual check. The title link and
-          the "View case study →" link below carry navigation instead. */}
-      <ProjectMedia
-        slug={slug}
-        title={title}
-        image={image}
-        imageAlt={imageAlt}
-        pathPrefix={pathPrefix}
-        wordless
-      />
-      <VStack gap={2}>
-        <Heading level={3} type="display-3" textWrap="balance">
-          <Link href={href} color="inherit">
+    <Link
+      href={href}
+      label={title}
+      color="inherit"
+      display="block"
+      style={{ display: "block" }}
+    >
+      <VStack gap={6}>
+        <ProjectMedia
+          slug={slug}
+          title={title}
+          image={image}
+          imageAlt={imageAlt}
+          pathPrefix={pathPrefix}
+          wordless
+        />
+        <VStack gap={4}>
+          <Heading level={3} type="display-3" textWrap="balance">
             {title}
-          </Link>
-        </Heading>
-        {highlight && (
-          <Text type="supporting" color="secondary">
-            {highlight}
-          </Text>
-        )}
+          </Heading>
+          {highlight && (
+            <Text type="supporting" color="secondary">
+              {highlight}
+            </Text>
+          )}
+        </VStack>
+        {description && <Text color="secondary">{description}</Text>}
+        <Text color="accent">View case study →</Text>
       </VStack>
-      {description && <Text color="secondary">{description}</Text>}
-      <Link href={href}>View case study →</Link>
-    </VStack>
+    </Link>
   );
 }
 
